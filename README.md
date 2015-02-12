@@ -5,4 +5,7 @@
 - Email: martin@porcheron.uk
 
 ## Readme
-Please see https://www.porcheron.uk/2015/02/08/a-php-based-freebusy-calendar/ ‎
+View the [blog post](https://www.porcheron.uk/fbc)
+
+## Questions/Issues?
+Please submit a [GitHub issue](https://github.com/mporcheron/FreeBusyCal)
