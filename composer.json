@@ -1,5 +1,21 @@
 {
-    "require": {
+	"name": "Porcheron/FreeBusyCal",
+	"description": "Calculate availability from an iCal server",
+	"license": "MIT",
+	"authors": [
+		{
+		"name": "Martin Porcheron",
+		"email": "martin@porcheron.uk"
+		}
+	],
+	"require": {
+		"php": ">=5.4.16",
         "sabre/vobject": "~3.3.4"
-    }
+	},
+    "require-dev": {
+        "squizlabs/php_codesniffer": "2.*"
+    },
+	"autoload": {
+		"psr-4": {"Porcheron\\FreeBusyCal\\": "src"}
+	}
 }
