@@ -2,7 +2,7 @@
 
 /**
  * FreeBusyCal example script. This file connects to an iCal server, retrieves data and calculates availbility,
- * generates a file and saves it to the filesystem.
+ * generates a file and outputs HTML.
  *
  * @author Martin Porcheron <martin@porcheron.uk>
  * @copyright (c) Martin Porcheron 2016.
