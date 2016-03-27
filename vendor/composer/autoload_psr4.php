@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Sabre\\VObject\\' => array($vendorDir . '/sabre/vobject/lib'),
+    'Porcheron\\FreeBusyCal\\' => array($baseDir . '/src'),
 );
