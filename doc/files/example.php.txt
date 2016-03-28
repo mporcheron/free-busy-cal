@@ -20,7 +20,7 @@ $cal = (new Fbc\Calendar())
     ->setPassword('password')
     ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
 
-$fbc = (new Fbc\FreeBusyCal($cal))
+$fbc = (new Fbc\Generator($cal))
     ->setDateRange(new \DateTime('Monday this week'), 14, false)
     ->setTimeRange(9, 17)
     ->setDayLabels('M', 'T', 'W', 'T', 'F', 'S', 'S')
@@ -101,9 +101,10 @@ echo <<<HEADER
     <body>
 
 HEADER;
-echo $fbc->printTable('class="cal"', Fbc\FreeBusyCal::DATE_FORMAT, Fbc\FreeBusyCal::TIME_FORMAT, 'Free', 'Busy');
+echo $fbc->printTable('class="cal"', Fbc\Generator::DATE_FORMAT, Fbc\Generator::TIME_FORMAT, 'Free', 'Busy');
 echo <<<FOOTER
 
     </body>
 </html>
 FOOTER;
+

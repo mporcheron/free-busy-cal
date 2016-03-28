@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/Porcheron.html">\Porcheron</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1403385331"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1403385331" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-751025467"></a>
+                                <a href="../namespaces/Porcheron.html" style="margin-left: 30px; padding-left: 0">Porcheron</a>
+            </div>
+            <div id="namespace-751025467" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-159518529"></a>
+                                <a href="../namespaces/Porcheron.FreeBusyCal.html" style="margin-left: 30px; padding-left: 0">FreeBusyCal</a>
+            </div>
+            <div id="namespace-159518529" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Porcheron.FreeBusyCal.Calendar.html">Calendar</a></li>
+                                                    <li class="class"><a href="../classes/Porcheron.FreeBusyCal.Generator.html">Generator</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/Porcheron.FreeBusyCal.html">\Porcheron\FreeBusyCal</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\Porcheron\FreeBusyCal</small>Generator</h1>
+                    <p><em>FreeBusyCal generator.</em></p>
+                    <p>Create a calendar configuration:
+<code>
+$cal = (new Porcheron\FreeBusy\Calendar())
+-&gt;setUsername('ad\username')
+-&gt;setPassword('password')
+-&gt;setUrl('<a href="https://caldav.example.com:8443/users/username@example.com/calendar">https://caldav.example.com:8443/users/username@example.com/calendar</a>');
+</code></p>
+<p>Create the Generator object and add the calendar:
+<code>
+$fbc = (new Porcheron\FreeBusyCal\Generator($cal));
+</code></p>
+<p>Set the date range to extract, e.g. start from this Monday, and run for 14 days (i.e. two weeks), but exclude
+weekends:
+<code>
+$fbc-&gt;setDateRange(new \DateTime('Monday this week'), 14, false);
+</code></p>
+<p>Only generate a calendar between 9am (inclusive) and 5pm (exclusive):
+<code>
+$fbc-&gt;setTimeRange(9, 17);
+</code></p>
+<p>Label the days in our output (optional, depends on if you use the built in output):
+<code>
+$fbc-&gt;setDayLabels('M', 'T', 'W', 'T', 'F', 'S', 'S');
+</code></p>
+<p>Show two weeks horizontally (optional, depends on if you use the built in output):
+<code>
+$fbc-&gt;setWeeksPerRow(2);
+</code></p>
+<p>Fetch the calendars and process them:
+<code>
+$fbc-&gt;-&gt;fetch();
+</code></p>
+<p>Print out the calendar table:
+<code>
+echo $fbc-&gt;getTable('class=&quot;cal&quot;',
+Porcheron\FreeBusyCal\Generator::DATE_FORMAT,
+Porcheron\FreeBusyCal\Generator::TIME_FORMAT,
+'Free',
+'Busy');
+</code></p>
+<p>Alternatively test if a specific time/date (i.e. 5pm on 4th May 2016) is available:
+<code>
+$free = $fbc-&gt;isFree('2016-05-04', 17, 0);
+</code></p>
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_addCalendar" class="">addCalendar()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_setDateRange" class="">setDateRange()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_setDayLabels" class="">setDayLabels()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_setWeeksPerRow" class="">setWeeksPerRow()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_setTimeRange" class="">setTimeRange()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_fetch" class="">fetch()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_getCalendarDays" class="">getCalendarDays()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_getCalendarDates" class="">getCalendarDates()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_getCalendarTimes" class="">getCalendarTimes()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_getCalendarData" class="">getCalendarData()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_isFree" class="">isFree()</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#method_getTable" class="">getTable()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#constant_DATE_FORMAT" class="">DATE_FORMAT</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#constant_TIME_FORMAT" class="">TIME_FORMAT</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#property_calendars" class="">$calendars</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#property_config" class="">$config</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#property_cachedCalendarData" class="">$cachedCalendarData</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#property_cachedCalendarDays" class="">$cachedCalendarDays</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#property_cachedCalendarDates" class="">$cachedCalendarDates</a><br />
+                                                                    <a href="../classes/Porcheron.FreeBusyCal.Generator.html#property_cachedCalendarTimes" class="">$cachedCalendarTimes</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/src.Generator.html"><div class="path-wrapper">src/Generator.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Porcheron\FreeBusyCal</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\Porcheron\FreeBusyCal\Generator</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr>
+                            <th>
+                                author
+                            </th>
+                            <td>
+                                                                    <p>Martin Porcheron <a href="mailto:martin@porcheron.uk">martin@porcheron.uk</a></p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                copyright
+                            </th>
+                            <td>
+                                                                    <p>(c) Martin Porcheron 2016.</p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                license
+                            </th>
+                            <td>
+                                                                    <p>MIT Licence</p>
+                                                            </td>
+                        </tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DATE_FORMAT" name="constant_DATE_FORMAT" class="anchor"></a>
+            <article id="constant_DATE_FORMAT" class="constant">
+                <h3 class="">DATE_FORMAT</h3>
+                <pre class="signature">DATE_FORMAT</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_TIME_FORMAT" name="constant_TIME_FORMAT" class="anchor"></a>
+            <article id="constant_TIME_FORMAT" class="constant">
+                <h3 class="">TIME_FORMAT</h3>
+                <pre class="signature">TIME_FORMAT</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_calendars" name="property_calendars" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$calendars</h3>
+                <pre class="signature">$calendars : array&lt;mixed,\Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\Calendar&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,\Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\Calendar&gt;
+                &mdash; Array of calendars to scrape for data.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_config" name="property_config" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$config</h3>
+                <pre class="signature">$config : array&lt;mixed,mixed&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,mixed&gt;
+                &mdash; Configuration data.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_cachedCalendarData" name="property_cachedCalendarData" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$cachedCalendarData</h3>
+                <pre class="signature">$cachedCalendarData : array&lt;mixed,mixed&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,mixed&gt;
+                &mdash; Cached calendar data.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_cachedCalendarDays" name="property_cachedCalendarDays" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$cachedCalendarDays</h3>
+                <pre class="signature">$cachedCalendarDays : array&lt;mixed,mixed&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,mixed&gt;
+                &mdash; Cached calendar days.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_cachedCalendarDates" name="property_cachedCalendarDates" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$cachedCalendarDates</h3>
+                <pre class="signature">$cachedCalendarDates : array&lt;mixed,mixed&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,mixed&gt;
+                &mdash; Cached calendar dates.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_cachedCalendarTimes" name="property_cachedCalendarTimes" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$cachedCalendarTimes</h3>
+                <pre class="signature">$cachedCalendarTimes : array&lt;mixed,mixed&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,mixed&gt;
+                &mdash; Cached calendar times.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(  <span class="argument">$cal</span>) </pre>
+                <p><em>Construct the controller and populate it with the configuration values. Constructing this class sets the time
+limit for script execution to indefinite and the default timezone because of a PHP oddity.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$cal </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addCalendar" name="method_addCalendar" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addCalendar()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addCalendar(\Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\Calendar  <span class="argument">$cal</span>) </pre>
+                <p><em>Add a calendar to extract data from.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\Calendar</td>
+                                <td>$cal </td>
+                                <td><p>Calendar to also extact data from.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setDateRange" name="method_setDateRange" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setDateRange()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setDateRange(\DateTime  <span class="argument">$startDate</span>,   <span class="argument">$numDays = 7</span>, boolean  <span class="argument">$includeWeekends = false</span>) : \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\Calendar</pre>
+                <p><em>Set the date range to generate data for.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\DateTime</td>
+                                <td>$startDate </td>
+                                <td><p>When to start the calendar from.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$numDays </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$includeWeekends </td>
+                                <td><p>Set to false to ignore weekends. Note weekennds still count in the number of
+of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will show Mon - Fri.)</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\Calendar
+                                            &mdash; <p><code>$this</code>.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/datetime.construct.php"><span class="namespace-wrapper">for valid strings for the start date.</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setDayLabels" name="method_setDayLabels" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setDayLabels()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setDayLabels(string  <span class="argument">$mon</span>, string  <span class="argument">$tues</span>, string  <span class="argument">$wed</span>, string  <span class="argument">$thurs</span>, string  <span class="argument">$fri</span>, string  <span class="argument">$sat</span>, string  <span class="argument">$sun</span>) : \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\FreeBusyCal</pre>
+                <p><em>Set the labels for each day.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$mon </td>
+                                <td><p>Label for Monday.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$tues </td>
+                                <td><p>Label for Tuesday.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$wed </td>
+                                <td><p>Label for Wednesday.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$thurs </td>
+                                <td><p>Label for Thurs.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$fri </td>
+                                <td><p>Label for Friday.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$sat </td>
+                                <td><p>Label for Saturday.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$sun </td>
+                                <td><p>Label for Sunday.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\FreeBusyCal
+                                            &mdash; <p><code>$this</code>.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setWeeksPerRow" name="method_setWeeksPerRow" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setWeeksPerRow()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setWeeksPerRow(integer  <span class="argument">$weeksPerRow</span>) : \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\FreeBusyCal</pre>
+                <p><em>Number of weeks to show per calendar row.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$weeksPerRow </td>
+                                <td><p>Number of weeks to show horizontally.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\FreeBusyCal
+                                            &mdash; <p><code>$this</code>.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setTimeRange" name="method_setTimeRange" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setTimeRange()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setTimeRange(integer  <span class="argument">$startHour</span>, integer  <span class="argument">$endHour</span>) : \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\FreeBusyCal</pre>
+                <p><em>Set the time range to generate data for.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$startHour </td>
+                                <td><p>First hour of the day to start output at (midnight = 0).</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$endHour </td>
+                                <td><p>Last hour of the day print output for (midnight = 0).</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\FreeBusyCal
+                                            &mdash; <p><code>$this</code>.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fetch" name="method_fetch" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">fetch()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fetch() : \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\FreeBusyCal</pre>
+                <p><em>Fetch and process the data needed to generate the availability calendar.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\FreeBusyCal
+                                            &mdash; <p><code>$this</code>.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCalendarDays" name="method_getCalendarDays" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCalendarDays()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCalendarDays() : array&lt;mixed,string&gt;</pre>
+                <p><em>Retrieve the labels for the calendar days to be displayed.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,string&gt;
+                                            &mdash; <p>Array of the calendar days to be displayed.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCalendarDates" name="method_getCalendarDates" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCalendarDates()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCalendarDates(string  <span class="argument">$format = self::DATE_FORMAT</span>) : array&lt;mixed,string&gt;</pre>
+                <p><em>Retrieve the values labels for the calendar dates to be displayed.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$format </td>
+                                <td><p>Format the dates to be displayed.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,string&gt;
+                                            &mdash; <p>Array of the calendar dates to be displayed.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCalendarTimes" name="method_getCalendarTimes" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCalendarTimes()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCalendarTimes(string  <span class="argument">$format = self::TIME_FORMAT</span>) : array&lt;mixed,string&gt;</pre>
+                <p><em>Retrieve the values labels for the calendar times to be displayed. At the moment, only hours are supported.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$format </td>
+                                <td><p>Format the times to be displayed.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,string&gt;
+                                            &mdash; <p>Array of the calendar times to be displayed.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCalendarData" name="method_getCalendarData" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCalendarData()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCalendarData() : array&lt;mixed,boolean&gt;</pre>
+                <p><em>Retrieve the availability for the calendar times to be displayed.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array&lt;mixed,boolean&gt;
+                                            &mdash; <p>Array of the calendar availability to be displayed.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isFree" name="method_isFree" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">isFree()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isFree(string  <span class="argument">$date</span>, string  <span class="argument">$hour</span>, string  <span class="argument">$minute</span>) : boolean</pre>
+                <p><em>Determine if we are available at a given time.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$date </td>
+                                <td><p>Date to check if available in YYYY-mm-dd format.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$hour </td>
+                                <td><p>Hour to check if available.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$minute </td>
+                                <td><p>Minute to check if available. Not supported for any value other than zero.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\OutOfBoundsException</dt>
+                            <dd><p>if the queried date or time is out of the given calendar range.</p></dd>
+                                                    <dt>\BadFunctionCallException</dt>
+                            <dd><p>if the calendar hasn't been fetched yet.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>{@code true} if available, false otherwise.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTable" name="method_getTable" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTable()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTable(string  <span class="argument">$tableAttrs = &#039;&#039;</span>, string  <span class="argument">$dateFormat = self::DATE_FORMAT</span>, string  <span class="argument">$timeFormat = self::TIME_FORMAT</span>, string  <span class="argument">$freeText = &#039;Free&#039;</span>, string  <span class="argument">$busyText = &#039;Busy&#039;</span>) : string</pre>
+                <p><em>Output the processed calendar data.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$tableAttrs </td>
+                                <td><p>HTML attributes for the table object.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$dateFormat </td>
+                                <td><p>Format the dates to be displayed.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$timeFormat </td>
+                                <td><p>Format the times to be displayed.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$freeText </td>
+                                <td><p>Text for an available slot.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$busyText </td>
+                                <td><p>Text for a busy slot.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>Calendar of availbility.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">Generator.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/src/Generator.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/Porcheron.html">\Porcheron</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on March 28th, 2016 at 10:44.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>
