@@ -43,13 +43,15 @@ Fetch the calendars and process them:
     $fbc->->fetch();
 
 
-Print out the calendar table:
+Print out the calendar table, with the class `cal`, default date and time formats, the labels `Free` and `Busy` for
+slots, and show times as ranges (i.e. start – end) as opposed to just start time:
 
     echo $fbc->getTable('class="cal"', 
      Porcheron\FreeBusyCal\Generator::DATE_FORMAT,
      Porcheron\FreeBusyCal\Generator::TIME_FORMAT, 
      'Free',
-     'Busy');
+     'Busy'
+     true);
 
 
 Alternatively test if a specific time/date (i.e. 5pm on 4th May 2016) is available:

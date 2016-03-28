@@ -563,3 +563,4 @@ class Generator
         return $table;
     }
 }
+

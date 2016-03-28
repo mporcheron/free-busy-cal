@@ -22,7 +22,7 @@ $cal = (new Fbc\Calendar())
 
 $fbc = (new Fbc\Generator($cal))
     ->setDateRange(new \DateTime('Monday this week'), 14, false)
-    ->setTimeRange(9, 17)
+    ->setTimeRange(9, 17, 30)
     ->setDayLabels('M', 'T', 'W', 'T', 'F', 'S', 'S')
     ->setWeeksPerRow(2)
     ->fetch();
@@ -101,7 +101,7 @@ echo <<<HEADER
     <body>
 
 HEADER;
-echo $fbc->get('class="cal"', Fbc\Generator::DATE_FORMAT, Fbc\Generator::TIME_FORMAT, 'Free', 'Busy');
+echo $fbc->get('class="cal"', Fbc\Generator::DATE_FORMAT, Fbc\Generator::TIME_FORMAT, 'Free', 'Busy', true);
 echo <<<FOOTER
 
     </body>

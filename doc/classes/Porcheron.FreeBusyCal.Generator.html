@@ -114,12 +114,12 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="../reports/errors.html">
-                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">0</span>
+                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">0</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="../reports/markers.html">
-                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
                                 </a>
                             </li>
                             <li>
@@ -144,28 +144,28 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1403385331"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1516058497"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1403385331" class="accordion-body collapse in">
+            <div id="namespace-1516058497" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-751025467"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1026567888"></a>
                                 <a href="../namespaces/Porcheron.html" style="margin-left: 30px; padding-left: 0">Porcheron</a>
             </div>
-            <div id="namespace-751025467" class="accordion-body collapse ">
+            <div id="namespace-1026567888" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-159518529"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1904234269"></a>
                                 <a href="../namespaces/Porcheron.FreeBusyCal.html" style="margin-left: 30px; padding-left: 0">FreeBusyCal</a>
             </div>
-            <div id="namespace-159518529" class="accordion-body collapse ">
+            <div id="namespace-1904234269" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -223,9 +223,9 @@ weekends:
 <code>
 $fbc-&gt;setDateRange(new \DateTime('Monday this week'), 14, false);
 </code></p>
-<p>Only generate a calendar between 9am (inclusive) and 5pm (exclusive):
+<p>Only generate a calendar between 9am (inclusive) and 5pm (exclusive), and show a slot every 30 minutes:
 <code>
-$fbc-&gt;setTimeRange(9, 17);
+$fbc-&gt;setTimeRange(9, 17, 30);
 </code></p>
 <p>Label the days in our output (optional, depends on if you use the built in output):
 <code>
@@ -239,13 +239,15 @@ $fbc-&gt;setWeeksPerRow(2);
 <code>
 $fbc-&gt;-&gt;fetch();
 </code></p>
-<p>Print out the calendar table:
+<p>Print out the calendar table, with the class <code>cal</code>, default date and time formats, the labels <code>Free</code> and <code>Busy</code> for
+slots, and show times as ranges (i.e. start – end) as opposed to just start time:
 <code>
 echo $fbc-&gt;getTable('class=&quot;cal&quot;',
 Porcheron\FreeBusyCal\Generator::DATE_FORMAT,
 Porcheron\FreeBusyCal\Generator::TIME_FORMAT,
 'Free',
-'Busy');
+'Busy',
+true);
 </code></p>
 <p>Alternatively test if a specific time/date (i.e. 5pm on 4th May 2016) is available:
 <code>
@@ -324,7 +326,7 @@ $free = $fbc-&gt;isFree('2016-05-04', 17, 0);
                     
                     <dl>
                         <dt>File</dt>
-                            <dd><a href="../files/src.Generator.html"><div class="path-wrapper">src/Generator.php</div></a></dd>
+                            <dd><a href="../files/Generator.html"><div class="path-wrapper">Generator.php</div></a></dd>
                                                 <dt>Package</dt>
                             <dd><div class="namespace-wrapper">Porcheron\FreeBusyCal</div></dd>
                                                 <dt>Class hierarchy</dt>
@@ -671,8 +673,8 @@ limit for script execution to indefinite and the default timezone because of a P
                                                     <tr>
                                 <td>boolean</td>
                                 <td>$includeWeekends </td>
-                                <td><p>Set to false to ignore weekends. Note weekennds still count in the number of
-of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will show Mon - Fri.)</p></td>
+                                <td><p>Set to false to ignore weekends. Note weekennds still count in the number of days (i.e. 7 days, and
+<code>$includeWeekends</code> starting on a Monday, will show Mon - Fri.)</p></td>
                             </tr>
                                             </table>
                 
@@ -687,7 +689,7 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
                                                                                             <dt>See also</dt>
-                                                                <dd><a href="http://php.net/manual/en/datetime.construct.php"><span class="namespace-wrapper">for valid strings for the start date.</span></a></dd>
+                                                                <dd><a href="http://php.net/manual/en/datetime.construct.php"><span class="namespace-wrapper"></span></a></dd>
                                                                 </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
@@ -806,7 +808,7 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
             <article class="method">
                 <h3 class="public ">setTimeRange()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">setTimeRange(integer  <span class="argument">$startHour</span>, integer  <span class="argument">$endHour</span>) : \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\FreeBusyCal</pre>
+                <pre class="signature" style="margin-right: 54px;">setTimeRange(integer  <span class="argument">$startHour</span>, integer  <span class="argument">$endHour</span>, integer  <span class="argument">$interval = 60</span>) : \Porcheron\FreeBusyCal\Porcheron\FreeBusyCal\FreeBusyCal</pre>
                 <p><em>Set the time range to generate data for.</em></p>
                 
 
@@ -815,12 +817,19 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
                                                     <tr>
                                 <td>integer</td>
                                 <td>$startHour </td>
-                                <td><p>First hour of the day to start output at (midnight = 0).</p></td>
+                                <td><p>First hour of the day to start output at (midnight = <code>0</code>). Minimum is <code>1</code>, maximum is <code>22</code>, default is <code>9</code>.</p></td>
                             </tr>
                                                     <tr>
                                 <td>integer</td>
                                 <td>$endHour </td>
-                                <td><p>Last hour of the day print output for (midnight = 0).</p></td>
+                                <td><p>Last hour of the day print output for (midnight = 0). Minimum is <code>$startHour</code>, maximum is <code>23</code>, default is <code>17</code>.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$interval </td>
+                                <td><p>How many mniutes to break each slot in the calendar up by (60 = segment by hour). You should make this number
+one of the following to fit evenly into the hour: 1,2,3,4,5,6,10,12,15,20,30,60. Minumum is <code>1</code>, maximum is
+<code>60</code>, default is <code>60</code>.</p></td>
                             </tr>
                                             </table>
                 
@@ -834,7 +843,9 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
-                                                                            </dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/datetime.construct.php"><span class="namespace-wrapper"></span></a></dd>
+                                                                </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
                                     <tr><td colspan="2"><em>None found</em></td></tr>
@@ -915,7 +926,7 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
                                                     <tr>
                                 <td>string</td>
                                 <td>$format </td>
-                                <td><p>Format the dates to be displayed.</p></td>
+                                <td><p>PHP <code>date</code> format the dates to be displayed.</p></td>
                             </tr>
                                             </table>
                 
@@ -929,7 +940,9 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
-                                                                            </dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/datetime.construct.php"><span class="namespace-wrapper"></span></a></dd>
+                                                                </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
                                     <tr><td colspan="2"><em>None found</em></td></tr>
@@ -952,21 +965,24 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
                                                     <tr>
                                 <td>string</td>
                                 <td>$format </td>
-                                <td><p>Format the times to be displayed.</p></td>
+                                <td><p>PHP <code>date</code> format the times to be displayed.</p></td>
                             </tr>
                                             </table>
                 
                 
                                     <h4>Returns</h4>
                     array&lt;mixed,string&gt;
-                                            &mdash; <p>Array of the calendar times to be displayed.</p>
+                                            &mdash; <p>Array of the calendar times to be displayed.
+<code>[YYYY-mm-dd][hour][minute] =&gt; [current time formatted, next time formatted]</code></p>
                                     				
                             </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
-                                                                            </dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/datetime.construct.php"><span class="namespace-wrapper"></span></a></dd>
+                                                                </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
                                     <tr><td colspan="2"><em>None found</em></td></tr>
@@ -1028,21 +1044,21 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
                                                     <tr>
                                 <td>string</td>
                                 <td>$minute </td>
-                                <td><p>Minute to check if available. Not supported for any value other than zero.</p></td>
+                                <td><p>Minute to check if available.</p></td>
                             </tr>
                                             </table>
                 
                                     <h4>Throws</h4>
                     <dl>
                                                     <dt>\OutOfBoundsException</dt>
-                            <dd><p>if the queried date or time is out of the given calendar range.</p></dd>
+                            <dd><p>If the queried date or time is out of the given calendar range.</p></dd>
                                                     <dt>\BadFunctionCallException</dt>
-                            <dd><p>if the calendar hasn't been fetched yet.</p></dd>
+                            <dd><p>If the calendar hasn't been fetched yet.</p></dd>
                                                                     </dl>
                 
                                     <h4>Returns</h4>
                     boolean
-                                            &mdash; <p>{@code true} if available, false otherwise.</p>
+                                            &mdash; <p><code>true</code> if available, false otherwise.</p>
                                     				
                             </article>
         </div>
@@ -1063,7 +1079,7 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
             <article class="method">
                 <h3 class="public ">getTable()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getTable(string  <span class="argument">$tableAttrs = &#039;&#039;</span>, string  <span class="argument">$dateFormat = self::DATE_FORMAT</span>, string  <span class="argument">$timeFormat = self::TIME_FORMAT</span>, string  <span class="argument">$freeText = &#039;Free&#039;</span>, string  <span class="argument">$busyText = &#039;Busy&#039;</span>) : string</pre>
+                <pre class="signature" style="margin-right: 54px;">getTable(string  <span class="argument">$tableAttrs = &#039;&#039;</span>, string  <span class="argument">$dateFormat = self::DATE_FORMAT</span>, string  <span class="argument">$timeFormat = self::TIME_FORMAT</span>, string  <span class="argument">$freeText = &#039;Free&#039;</span>, string  <span class="argument">$busyText = &#039;Busy&#039;</span>, boolean  <span class="argument">$showRange = false</span>) : string</pre>
                 <p><em>Output the processed calendar data.</em></p>
                 
 
@@ -1077,12 +1093,12 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
                                                     <tr>
                                 <td>string</td>
                                 <td>$dateFormat </td>
-                                <td><p>Format the dates to be displayed.</p></td>
+                                <td><p>PHP <code>date</code> format the dates to be displayed.</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
                                 <td>$timeFormat </td>
-                                <td><p>Format the times to be displayed.</p></td>
+                                <td><p>PHP <code>date</code> format the times to be displayed.</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
@@ -1093,6 +1109,11 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
                                 <td>string</td>
                                 <td>$busyText </td>
                                 <td><p>Text for a busy slot.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$showRange </td>
+                                <td><p>Show the start and end time for a slot (if <code>true</code>), seperated with two non-breaking spaces and an en-dash.</p></td>
                             </tr>
                                             </table>
                 
@@ -1106,7 +1127,9 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
-                                                                            </dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/datetime.construct.php"><span class="namespace-wrapper"></span></a></dd>
+                                                                </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
                                     <tr><td colspan="2"><em>None found</em></td></tr>
@@ -1123,7 +1146,7 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
             <h3 id="source-view-label">Generator.php</h3>
         </div>
         <div class="modal-body">
-            <pre data-src="../files/src/Generator.php.txt" class="language-php line-numbers"></pre>
+            <pre data-src="../files/Generator.php.txt" class="language-php line-numbers"></pre>
         </div>
     </div>
 
@@ -1164,7 +1187,7 @@ of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will sh
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on March 28th, 2016 at 10:44.
+                    on March 29th, 2016 at 00:14.
                 </section>
             </section>
         </section>
