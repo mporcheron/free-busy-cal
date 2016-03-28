@@ -223,6 +223,10 @@ class Generator
      * @param int $startHour First hour of the day to start output at (midnight = 0).
      * @param int $endHour Last hour of the day print output for (midnight = 0).
      * @return Porcheron\FreeBusyCal\FreeBusyCal `$this`.
+     * @param int $startHour
+     *  First hour of the day to start output at (midnight = `0`). Minimum is `1`, maximum is `22`, default is `9`.
+     * @param int $endHour
+     *  Last hour of the day print output for (midnight = 0). Minimum is `$startHour`, maximum is `23`, default is `17`.
      */
     public function setTimeRange($startHour, $endHour)
     {
@@ -236,7 +240,7 @@ class Generator
         $endHour = \filter_var(
             $endHour,
             FILTER_SANITIZE_NUMBER_INT,
-            ['options' => ['default' => 9, 'min_range' => $startHour, 'max_range' => $startHour + 1]]
+            ['options' => ['default' => 17, 'min_range' => $startHour, 'max_range' => 23]]
         );
         $this->config['endHour'] = $endHour;
 
