@@ -42,8 +42,10 @@ class Calendar extends \ArrayObject
     /**
      * Set the username to connect with.
      *
-     * @param string $username New username to login with. Leave blank to disable.
-     * @return Porcheron\FreeBusyCal\Calendar `$this`.
+     * @param string $username
+     *  New username to login with. Leave blank to disable.
+     * @return Porcheron\FreeBusyCal\Calendar
+     *  `$this`.
      */
     public function setUsername($username = '')
     {
@@ -54,8 +56,10 @@ class Calendar extends \ArrayObject
     /**
      * Set the password to connect with.
      *
-     * @param string $password New password to login with. Leave blank to disable.
-     * @return Porcheron\FreeBusyCal\Calendar `$this`.
+     * @param string $password
+     *  New password to login with. Leave blank to disable.
+     * @return Porcheron\FreeBusyCal\Calendar
+     *  `$this`.
      */
     public function setPassword($password = '')
     {
@@ -66,8 +70,10 @@ class Calendar extends \ArrayObject
     /**
      * Set the URL to connect to.
      *
-     * @param string $url New URL to connect to.
-     * @return Porcheron\FreeBusyCal\Calendar `$this`.
+     * @param string $url
+     *  New URL to connect to.
+     * @return Porcheron\FreeBusyCal\Calendar
+     *  `$this`.
      */
     public function setUrl($url)
     {
@@ -95,8 +101,10 @@ class Calendar extends \ArrayObject
     /**
      * Connect with SSL?
      *
-     * @param boolean $ssl Set to {@code true} to connect with SSL.
-     * @return Porcheron\FreeBusyCal\Calendar `$this`.
+     * @param boolean $ssl
+     *  Set to {@code true} to connect with SSL.
+     * @return Porcheron\FreeBusyCal\Calendar
+     *  `$this`.
      */
     public function enableSsl($ssl)
     {

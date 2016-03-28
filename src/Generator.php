@@ -120,7 +120,8 @@ class Generator
      * Construct the controller and populate it with the configuration values. Constructing this class sets the time
      * limit for script execution to indefinite and the default timezone because of a PHP oddity.
      *
-     * @param Porcheron\FreeBusyCal\Calendar $cal,... Calendars to extract data from.
+     * @param Porcheron\FreeBusyCal\Calendar $cal,...
+     *  Calendars to extract data from.
      */
     public function __construct(&$cal)
     {
@@ -146,7 +147,8 @@ class Generator
     /**
      * Add a calendar to extract data from.
      *
-     * @param Porcheron\FreeBusyCal\Calendar $cal Calendar to also extact data from.
+     * @param Porcheron\FreeBusyCal\Calendar $cal
+     *  Calendar to also extact data from.
      */
     public function addCalendar(Calendar &$cal) {
         $this->calendars[] = $cal;
@@ -155,12 +157,16 @@ class Generator
     /**
      * Set the date range to generate data for.
      *
-     * @see http://php.net/manual/en/datetime.construct.php for valid strings for the start date.
-     * @param \DateTime $startDate When to start the calendar from.
-     * @param int $length Number of days from the start date to generate calendar for.
-     * @param boolean $includeWeekends Set to false to ignore weekends. Note weekennds still count in the number of
-     *  of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will show Mon - Fri.)
-     * @return Porcheron\FreeBusyCal\Calendar `$this`.
+     * @see http://php.net/manual/en/datetime.construct.php
+     * @param \DateTime $startDate
+     *  When to start the calendar from.
+     * @param int $length
+     *  Number of days from the start date to generate calendar for.
+     * @param boolean $includeWeekends
+     *  Set to false to ignore weekends. Note weekennds still count in the number of days (i.e. 7 days, and 
+     *  `$includeWeekends` starting on a Monday, will show Mon - Fri.)
+     * @return Porcheron\FreeBusyCal\Calendar
+     *  `$this`.
      */
     public function setDateRange(\DateTime &$startDate, $numDays = 7, $includeWeekends = false)
     {
@@ -182,14 +188,22 @@ class Generator
     /**
      * Set the labels for each day.
      *
-     * @param string $mon Label for Monday.
-     * @param string $tues Label for Tuesday.
-     * @param string $wed Label for Wednesday.
-     * @param string $thurs Label for Thurs.
-     * @param string $fri Label for Friday.
-     * @param string $sat Label for Saturday.
-     * @param string $sun Label for Sunday.
-     * @return Porcheron\FreeBusyCal\FreeBusyCal `$this`.
+     * @param string $mon
+     *  Label for Monday.
+     * @param string $tues
+     *  Label for Tuesday.
+     * @param string $wed
+     *  Label for Wednesday.
+     * @param string $thurs
+     *  Label for Thurs.
+     * @param string $fri
+     *  Label for Friday.
+     * @param string $sat
+     *  Label for Saturday.
+     * @param string $sun
+     *  Label for Sunday.
+     * @return Porcheron\FreeBusyCal\FreeBusyCal
+     *  `$this`.
      */
     public function setDayLabels($mon, $tues, $wed, $thurs, $fri, $sat, $sun)
     {
@@ -204,8 +218,10 @@ class Generator
     /**
      * Number of weeks to show per calendar row.
      *
-     * @param int $weeksPerRow Number of weeks to show horizontally.
-     * @return Porcheron\FreeBusyCal\FreeBusyCal `$this`.
+     * @param int $weeksPerRow
+     *  Number of weeks to show horizontally.
+     * @return Porcheron\FreeBusyCal\FreeBusyCal
+     *  `$this`.
      */
     public function setWeeksPerRow($weeksPerRow)
     {   
@@ -220,9 +236,7 @@ class Generator
     /**
      * Set the time range to generate data for.
      *
-     * @param int $startHour First hour of the day to start output at (midnight = 0).
-     * @param int $endHour Last hour of the day print output for (midnight = 0).
-     * @return Porcheron\FreeBusyCal\FreeBusyCal `$this`.
+     * @see http://php.net/manual/en/datetime.construct.php
      * @param int $startHour
      *  First hour of the day to start output at (midnight = `0`). Minimum is `1`, maximum is `22`, default is `9`.
      * @param int $endHour
@@ -250,7 +264,8 @@ class Generator
     /**
      * Fetch and process the data needed to generate the availability calendar.
      *
-     * @return Porcheron\FreeBusyCal\FreeBusyCal `$this`.
+     * @return Porcheron\FreeBusyCal\FreeBusyCal
+     *  `$this`.
      */
     public function fetch()
     {
@@ -260,6 +275,7 @@ class Generator
         $this->cachedCalendarDates = [];
         $this->cachedCalendarTimes = [];
 
+        // Fetch data from the CalDAV server
         $contents = '';
         foreach ($this->calendars as $cal) {
             $dav = new \CalDAVClient(
@@ -318,7 +334,8 @@ class Generator
     /**
      * Retrieve the labels for the calendar days to be displayed.
      *
-     * @return string[] Array of the calendar days to be displayed.
+     * @return string[]
+     *  Array of the calendar days to be displayed.
      */
     public function getCalendarDays()
     {
@@ -344,8 +361,11 @@ class Generator
     /**
      * Retrieve the values labels for the calendar dates to be displayed.
      *
-     * @param string $format Format the dates to be displayed.
-     * @return string[] Array of the calendar dates to be displayed.
+     * @see http://php.net/manual/en/datetime.construct.php
+     * @param string $format
+     *  PHP `date` format the dates to be displayed.
+     * @return string[]
+     *  Array of the calendar dates to be displayed.
      */
     public function getCalendarDates($format = self::DATE_FORMAT)
     {
@@ -370,8 +390,11 @@ class Generator
     /**
      * Retrieve the values labels for the calendar times to be displayed. At the moment, only hours are supported.
      *
-     * @param string $format Format the times to be displayed.
-     * @return string[] Array of the calendar times to be displayed.
+     * @see http://php.net/manual/en/datetime.construct.php
+     * @param string $format
+     *  PHP `date` format the times to be displayed.
+     * @return string[]
+     *  Array of the calendar times to be displayed.
      */
     public function getCalendarTimes($format = self::TIME_FORMAT)
     {
@@ -391,7 +414,8 @@ class Generator
     /**
      * Retrieve the availability for the calendar times to be displayed.
      *
-     * @return boolean[] Array of the calendar availability to be displayed.
+     * @return boolean[]
+     *  Array of the calendar availability to be displayed.
      */
     public function getCalendarData()
     {
@@ -401,12 +425,18 @@ class Generator
     /**
      * Determine if we are available at a given time.
      *
-     * @param string $date Date to check if available in YYYY-mm-dd format.
-     * @param string $hour Hour to check if available.
-     * @param string $minute Minute to check if available. Not supported for any value other than zero.
-     * @return boolean {@code true} if available, false otherwise.
-     * @throws \OutOfBoundsException if the queried date or time is out of the given calendar range.
-     * @throws \BadFunctionCallException if the calendar hasn't been fetched yet.
+     * @param string $date
+     *  Date to check if available in YYYY-mm-dd format.
+     * @param string $hour
+     *  Hour to check if available.
+     * @param string $minute
+     *  Minute to check if available. Not supported for any value other than zero.
+     * @return boolean
+     *  `true` if available, false otherwise.
+     * @throws \OutOfBoundsException
+     *  If the queried date or time is out of the given calendar range.
+     * @throws \BadFunctionCallException
+     *  If the calendar hasn't been fetched yet.
      */
     public function isFree($date, $hour, $minute = 0)
     {
@@ -424,12 +454,19 @@ class Generator
     /**
      * Output the processed calendar data.
      *
-     * @param string $tableAttrs HTML attributes for the table object.
-     * @param string $dateFormat Format the dates to be displayed.
-     * @param string $timeFormat Format the times to be displayed.
-     * @param string $freeText Text for an available slot.
-     * @param string $busyText Text for a busy slot.
-     * @return string Calendar of availbility.
+     * @see http://php.net/manual/en/datetime.construct.php
+     * @param string $tableAttrs
+     *  HTML attributes for the table object.
+     * @param string $dateFormat
+     *  PHP `date` format the dates to be displayed.
+     * @param string $timeFormat
+     *  PHP `date` format the times to be displayed.
+     * @param string $freeText
+     *  Text for an available slot.
+     * @param string $busyText
+     *  Text for a busy slot.
+     * @return string
+     *  Calendar of availbility.
      */
     public function getTable(
         $tableAttrs = '',
