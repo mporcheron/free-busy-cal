@@ -82,6 +82,15 @@ class FreeBusyCal
     }
 
     /**
+     * Add a calendar to extract data from.
+     *
+     * @param Porcheron\FreeBusyCal\Calendar $cal Calendar to also extact data from.
+     */
+    public function addCalendar(Calendar &$cal) {
+        $this->calendars[] = $cal;
+    }
+
+    /**
      * Set the date range to generate data for.
      *
      * @see http://php.net/manual/en/datetime.construct.php for valid strings for the start date.
