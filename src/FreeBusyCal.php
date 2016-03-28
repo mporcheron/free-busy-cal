@@ -17,7 +17,7 @@ class FreeBusyCal
 {
     
     /**
-     * @var Calendar[] Array of calendars to scrape for data.
+     * @var \Porcheron\FreeBusyCal\Calendar[] Array of calendars to scrape for data.
      */
     private $calendars;
 
@@ -59,6 +59,8 @@ class FreeBusyCal
     /**
      * Construct the controller and populate it with the configuration values. Constructing this class sets the time
      * limit for script execution to indefinite and the default timezone because of a PHP oddity.
+     *
+     * @param \Porcheron\FreeBusyCal\Calendar $cal Calendars to extract data from.
      */
     public function __construct(Calendar &...$cal)
     {
@@ -98,7 +100,7 @@ class FreeBusyCal
      * @param int $length Number of days from the start date to generate calendar for.
      * @param boolean $includeWeekends Set to false to ignore weekends. Note weekennds still count in the number of
      *  of days (i.e. 7 days, and {@code $includeWeekends} starting on a Monday, will show Mon - Fri.)
-     * @return Porcheron\FreeBusyCal\Calendar {@code $this}.
+     * @return \Porcheron\FreeBusyCal\Calendar {@code $this}.
      */
     public function setDateRange(\DateTime &$startDate, $numDays = 7, $includeWeekends = false)
     {
@@ -127,7 +129,7 @@ class FreeBusyCal
      * @param string $fri Label for Friday.
      * @param string $sat Label for Saturday.
      * @param string $sun Label for Sunday.
-     * @return Porcheron\FreeBusyCal\Calendar {@code $this}.
+     * @return \Porcheron\FreeBusyCal\FreeBusyCal {@code $this}.
      */
     public function setDayLabels($mon, $tues, $wed, $thurs, $fri, $sat, $sun)
     {
@@ -143,10 +145,10 @@ class FreeBusyCal
      * Number of weeks to show per calendar row.
      *
      * @param int $weeksPerRow Number of weeks to show horizontally.
-     * @return Porcheron\FreeBusyCal\Calendar {@code $this}.
+     * @return \Porcheron\FreeBusyCal\FreeBusyCal {@code $this}.
      */
     public function setWeeksPerRow($weeksPerRow)
-    {
+    {   
         $this->config['weeksPerRow'] = \filter_var(
             $weeksPerRow,
             FILTER_SANITIZE_NUMBER_INT,
@@ -160,7 +162,7 @@ class FreeBusyCal
      *
      * @param int $startHour First hour of the day to start output at (midnight = 0).
      * @param int $endHour Last hour of the day print output for (midnight = 0).
-     * @return Porcheron\FreeBusyCal\Calendar {@code $this}.
+     * @return \Porcheron\FreeBusyCal\FreeBusyCal {@code $this}.
      */
     public function setTimeRange($startHour, $endHour)
     {
@@ -184,7 +186,7 @@ class FreeBusyCal
     /**
      * Fetch and process the data needed to generate the availability calendar.
      *
-     * @return Porcheron\FreeBusyCal\Calendar {@code $this}.
+     * @return \Porcheron\FreeBusyCal\FreeBusyCal {@code $this}.
      */
     public function fetch()
     {
@@ -359,7 +361,7 @@ class FreeBusyCal
      *
      * @param string $dateFormat Format the dates to be displayed.
      * @param string $timeFormat Format the times to be displayed.
-     * @return Porcheron\FreeBusyCal\Calendar {@code $this}.
+     * @return \Porcheron\FreeBusyCal\FreeBusyCal {@code $this}.
      */
     public function printTable(
         $tableAttrs = '',
@@ -403,5 +405,7 @@ class FreeBusyCal
         }
       
         echo '</table>';
+
+        return $this.
     }
 }
