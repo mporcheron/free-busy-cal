@@ -19,7 +19,7 @@ class FreeBusyCal
     /**
      * @var Calendar[] Array of calendars to scrape for data.
      */
-    private $calendars = [];
+    private $calendars;
 
     /**
      * @var mixed[] Configuration data.
@@ -348,7 +348,6 @@ class FreeBusyCal
         }
 
         if (!isset($this->cachedCalendarData[$date][$hour][$minute])) {
-            print_r($this->cachedCalendarData);
             throw new \OutOfBoundsException('Time tested for availbility must be in calendar range');
         }
 
