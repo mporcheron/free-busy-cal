@@ -250,6 +250,7 @@ class Generator
      */
     public function fetch()
     {
+        // Clear object data caches
         $this->cachedCalendarData = null;
         $this->cachedCalendarDays = null;
         $this->cachedCalendarDates = [];
