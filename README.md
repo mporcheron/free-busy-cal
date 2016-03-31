@@ -6,7 +6,7 @@ An example usage can be found in `example.php`. This file connects to a CalDAV s
 
 Create a calendar configuration:
 
-    $cal = (new Porcheron\FreeBusy\Calendar())
+    $cal = (new MPorcheron\FreeBusy\Calendar())
       ->setUsername('ad\username')
       ->setPassword('password')
       ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
@@ -14,7 +14,7 @@ Create a calendar configuration:
 
 Create the Generator object and add the calendar:
 
-    $fbc = (new Porcheron\FreeBusyCal\Generator($cal));
+    $fbc = (new MPorcheron\FreeBusyCal\Generator($cal));
 
 
 Set the date range to extract, e.g. start from this Monday, and run for 14 days (i.e. two weeks), but exclude
@@ -47,8 +47,8 @@ Print out the calendar table, with the class `cal`, default date and time format
 slots, and show times as ranges (i.e. start – end) as opposed to just start time:
 
     echo $fbc->getTable('class="cal"', 
-     Porcheron\FreeBusyCal\Generator::DATE_FORMAT,
-     Porcheron\FreeBusyCal\Generator::TIME_FORMAT, 
+     MPorcheron\FreeBusyCal\Generator::DATE_FORMAT,
+     MPorcheron\FreeBusyCal\Generator::TIME_FORMAT, 
      'Free',
      'Busy'
      true);

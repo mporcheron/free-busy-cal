@@ -9,9 +9,9 @@
  * @license MIT Licence
  */
 
-use Porcheron\FreeBusyCal as Fbc;
-
 include 'vendor/autoload.php';
+
+use MPorcheron\FreeBusyCal as Fbc;
 
 // Configuration of calendars //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -101,7 +101,15 @@ echo <<<HEADER
     <body>
 
 HEADER;
-echo $fbc->get('class="cal"', Fbc\Generator::DATE_FORMAT, Fbc\Generator::TIME_FORMAT, 'Free', 'Busy', true);
+
+echo $fbc->get(
+    'class="cal"',
+    Fbc\Generator::DATE_FORMAT,
+    Fbc\Generator::TIME_FORMAT,
+    'Free',
+    'Busy',
+    true);
+
 echo <<<FOOTER
 
     </body>

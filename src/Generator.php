@@ -4,10 +4,10 @@
  * This file is the main FreeBusyCal generator used to retrieve and generate a free/busy calendar. See the class
  * description for example usage.
  *
- * @package Porcheron\FreeBusyCal
+ * @package MPorcheron\FreeBusyCal
  */
 
-namespace Porcheron\FreeBusyCal;
+namespace MPorcheron\FreeBusyCal;
 
 use Sabre\VObject\Reader;
 use Sabre\VObject\FreeBusyGenerator;
@@ -17,7 +17,7 @@ use Sabre\VObject\FreeBusyGenerator;
  *
  * Create a calendar configuration:
  * <code>
- * $cal = (new Porcheron\FreeBusy\Calendar())
+ * $cal = (new MPorcheron\FreeBusy\Calendar())
  *   ->setUsername('ad\username')
  *   ->setPassword('password')
  *   ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
@@ -25,7 +25,7 @@ use Sabre\VObject\FreeBusyGenerator;
  *
  * Create the Generator object and add the calendar:
  * <code>
- * $fbc = (new Porcheron\FreeBusyCal\Generator($cal));
+ * $fbc = (new MPorcheron\FreeBusyCal\Generator($cal));
  * </code>
  *
  * Set the date range to extract, e.g. start from this Monday, and run for 14 days (i.e. two weeks), but exclude
@@ -58,8 +58,8 @@ use Sabre\VObject\FreeBusyGenerator;
  *  slots, and show times as ranges (i.e. start – end) as opposed to just start time:
  * <code>
  * echo $fbc->getTable('class="cal"',
- *  Porcheron\FreeBusyCal\Generator::DATE_FORMAT,
- *  Porcheron\FreeBusyCal\Generator::TIME_FORMAT,
+ *  MPorcheron\FreeBusyCal\Generator::DATE_FORMAT,
+ *  MPorcheron\FreeBusyCal\Generator::TIME_FORMAT,
  *  'Free',
  *  'Busy',
  *  true);
@@ -79,7 +79,7 @@ class Generator
 {
     
     /**
-     * @var Porcheron\FreeBusyCal\Calendar[] Array of calendars to scrape for data.
+     * @var MPorcheron\FreeBusyCal\Calendar[] Array of calendars to scrape for data.
      */
     private $calendars;
 
@@ -122,7 +122,7 @@ class Generator
      * Construct the controller and populate it with the configuration values. Constructing this class sets the time
      * limit for script execution to indefinite and the default timezone because of a PHP oddity.
      *
-     * @param Porcheron\FreeBusyCal\Calendar $cal,...
+     * @param MPorcheron\FreeBusyCal\Calendar $cal,...
      *  Calendars to extract data from.
      */
     public function __construct(&$cal)
@@ -150,7 +150,7 @@ class Generator
     /**
      * Add a calendar to extract data from.
      *
-     * @param Porcheron\FreeBusyCal\Calendar $cal
+     * @param MPorcheron\FreeBusyCal\Calendar $cal
      *  Calendar to also extact data from.
      */
     public function addCalendar(Calendar &$cal)
@@ -169,7 +169,7 @@ class Generator
      * @param boolean $includeWeekends
      *  Set to false to ignore weekends. Note weekennds still count in the number of days (i.e. 7 days, and
      *  `$includeWeekends` starting on a Monday, will show Mon - Fri.)
-     * @return Porcheron\FreeBusyCal\Calendar
+     * @return MPorcheron\FreeBusyCal\Calendar
      *  `$this`.
      */
     public function setDateRange(\DateTime &$startDate, $numDays = 7, $includeWeekends = false)
@@ -206,7 +206,7 @@ class Generator
      *  Label for Saturday.
      * @param string $sun
      *  Label for Sunday.
-     * @return Porcheron\FreeBusyCal\FreeBusyCal
+     * @return MPorcheron\FreeBusyCal\FreeBusyCal
      *  `$this`.
      */
     public function setDayLabels($mon, $tues, $wed, $thurs, $fri, $sat, $sun)
@@ -224,7 +224,7 @@ class Generator
      *
      * @param int $weeksPerRow
      *  Number of weeks to show horizontally.
-     * @return Porcheron\FreeBusyCal\FreeBusyCal
+     * @return MPorcheron\FreeBusyCal\FreeBusyCal
      *  `$this`.
      */
     public function setWeeksPerRow($weeksPerRow)
@@ -249,7 +249,7 @@ class Generator
      *  How many mniutes to break each slot in the calendar up by (60 = segment by hour). You should make this number
      *  one of the following to fit evenly into the hour: 1,2,3,4,5,6,10,12,15,20,30,60. Minumum is `1`, maximum is
      *  `60`, default is `60`.
-     * @return Porcheron\FreeBusyCal\FreeBusyCal
+     * @return MPorcheron\FreeBusyCal\FreeBusyCal
      *  `$this`.
      */
     public function setTimeRange($startHour, $endHour, $interval = 60)
@@ -281,7 +281,7 @@ class Generator
     /**
      * Fetch and process the data needed to generate the availability calendar.
      *
-     * @return Porcheron\FreeBusyCal\FreeBusyCal
+     * @return MPorcheron\FreeBusyCal\FreeBusyCal
      *  `$this`.
      */
     public function fetch()

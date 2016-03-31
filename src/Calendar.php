@@ -3,10 +3,10 @@
 /**
  * File for a calendar configuration.
  *
- * @package Porcheron\FreeBusyCal
+ * @package MPorcheron\FreeBusyCal
  */
 
-namespace Porcheron\FreeBusyCal;
+namespace MPorcheron\FreeBusyCal;
 
 /**
  * Container for a calendar's configuration details.
@@ -44,7 +44,7 @@ class Calendar extends \ArrayObject
      *
      * @param string $username
      *  New username to login with. Leave blank to disable.
-     * @return Porcheron\FreeBusyCal\Calendar
+     * @return MPorcheron\FreeBusyCal\Calendar
      *  `$this`.
      */
     public function setUsername($username = '')
@@ -58,7 +58,7 @@ class Calendar extends \ArrayObject
      *
      * @param string $password
      *  New password to login with. Leave blank to disable.
-     * @return Porcheron\FreeBusyCal\Calendar
+     * @return MPorcheron\FreeBusyCal\Calendar
      *  `$this`.
      */
     public function setPassword($password = '')
@@ -72,7 +72,7 @@ class Calendar extends \ArrayObject
      *
      * @param string $url
      *  New URL to connect to.
-     * @return Porcheron\FreeBusyCal\Calendar
+     * @return MPorcheron\FreeBusyCal\Calendar
      *  `$this`.
      */
     public function setUrl($url)
@@ -103,7 +103,7 @@ class Calendar extends \ArrayObject
      *
      * @param boolean $ssl
      *  Set to {@code true} to connect with SSL.
-     * @return Porcheron\FreeBusyCal\Calendar
+     * @return MPorcheron\FreeBusyCal\Calendar
      *  `$this`.
      */
     public function enableSsl($ssl)

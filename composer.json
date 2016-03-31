@@ -16,6 +16,6 @@
         "squizlabs/php_codesniffer": "2.*"
     },
 	"autoload": {
-		"psr-4": {"Porcheron\\FreeBusyCal\\": "src"}
+		"psr-4": {"MPorcheron\\FreeBusyCal\\": "src"}
 	}
 }
