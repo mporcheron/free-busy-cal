@@ -9,9 +9,6 @@
 
 namespace MPorcheron\FreeBusyCal;
 
-use Sabre\VObject\Reader;
-use Sabre\VObject\FreeBusyGenerator;
-
 /**
  * FreeBusyCal generator.
  *
@@ -127,9 +124,6 @@ class Generator
      */
     public function __construct(&$cal)
     {
-        include_once 'lib/awl/CalendarInfo.php';
-        include_once 'lib/awl/CalDAVClient.php';
-
         \set_time_limit(0);
         \date_default_timezone_set('Europe/London');
 
@@ -145,6 +139,16 @@ class Generator
             'daysOfTheWeek' => [ 'M', 'T', 'W', 'T', 'F', 'S', 'S' ],
             'weeksPerRow' => 2,
             'includeWeekends' => false];
+    }
+
+    /**
+     * Get the congiruation data.
+     * 
+     * @return mixed[]
+     *  Configuration data.
+     */
+    public function getConfig() {
+        return $this->config;
     }
 
     /**
@@ -206,7 +210,7 @@ class Generator
      *  Label for Saturday.
      * @param string $sun
      *  Label for Sunday.
-     * @return MPorcheron\FreeBusyCal\FreeBusyCal
+     * @return MPorcheron\FreeBusyCal\Generator
      *  `$this`.
      */
     public function setDayLabels($mon, $tues, $wed, $thurs, $fri, $sat, $sun)
@@ -224,7 +228,7 @@ class Generator
      *
      * @param int $weeksPerRow
      *  Number of weeks to show horizontally.
-     * @return MPorcheron\FreeBusyCal\FreeBusyCal
+     * @return MPorcheron\FreeBusyCal\Generator
      *  `$this`.
      */
     public function setWeeksPerRow($weeksPerRow)
@@ -249,7 +253,7 @@ class Generator
      *  How many mniutes to break each slot in the calendar up by (60 = segment by hour). You should make this number
      *  one of the following to fit evenly into the hour: 1,2,3,4,5,6,10,12,15,20,30,60. Minumum is `1`, maximum is
      *  `60`, default is `60`.
-     * @return MPorcheron\FreeBusyCal\FreeBusyCal
+     * @return MPorcheron\FreeBusyCal\Generator
      *  `$this`.
      */
     public function setTimeRange($startHour, $endHour, $interval = 60)
@@ -281,7 +285,7 @@ class Generator
     /**
      * Fetch and process the data needed to generate the availability calendar.
      *
-     * @return MPorcheron\FreeBusyCal\FreeBusyCal
+     * @return MPorcheron\FreeBusyCal\Generator
      *  `$this`.
      */
     public function fetch()
@@ -293,70 +297,16 @@ class Generator
         $this->cachedCalendarTimes = [];
 
         // Fetch data from the CalDAV server
-        $contents = '';
+        $availability = null;
         foreach ($this->calendars as $cal) {
-            $dav = new \CalDAVClient(
-                $cal->url,
-                $cal->username,
-                $cal->password,
-                '',
-                ($cal->ssl ? 'ssl://' : '') . $cal->host,
-                $cal->port
-            );
-            
-            $events = $dav->GetEvents(
-                $this->config['startDate']->format('Ymd\THis\Z'),
-                $this->config['endDate']->format('Ymd\THis\Z')
-            );
-            foreach ($events as $event) {
-                $contents .= $event['data'] ."\n";
+            if (is_null($availability)) {
+                $availability = $cal->fetch($this->config);
+            } else {
+                $availability->merge($cal->fetch($this->config));
             }
         }
 
-        $contents = \preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
-        $contents = "BEGIN:VCALENDAR\n" . \preg_replace("/(BEGIN|END):VCALENDAR\n/", "", $contents) . "END:VCALENDAR" ;
-        $contents = \preg_replace("/\n\s/", "", $contents);
-
-        // Process calendars
-        $vcal = Reader::read($contents, Reader::OPTION_FORGIVING|Reader::OPTION_IGNORE_INVALID_LINES);
-        $fbGenerator = new FreeBusyGenerator($this->config['startDate'], $this->config['endDate'], $vcal);
-        $cmnts = $fbGenerator->getResult()->getComponents();
-        $fb = $cmnts[0];
-
-        // Mark every time as free/busy
-        $calendar = [];
-        $currentTime = clone $this->config['startDate'];
-        $startHour = $this->config['startHour'];
-        $interval = $this->config['interval'];
-        $endHour = $this->config['endHour'];
-        for ($day = 0; $day < $this->config['numDays']; $day++) {
-            if ($this->config['includeWeekends'] || $currentTime->format('N') <= 5) {
-                $nextTime = clone $currentTime;
-
-                $dayKey = $currentTime->format('Y-m-d');
-                $calendar[$dayKey] = [];
-
-                for ($hour = $startHour, $minute = 0, $hourDelta = 0, $nextMinute = 0;
-                    $hour < $endHour;
-                    $hour += $hourDelta, $minute = $nextMinute) {
-                    $hourDelta = floor(($minute + $interval) / 60);
-                    $nextMinute = ($minute + $interval) % 60;
-
-                    $currentTime->setTime($hour, $minute, 0);
-                    $nextTime->setTime($hour + $hourDelta, $nextMinute, 0);
-
-                    if (!isset($calendar[$dayKey][$currentTime->format('G')])) {
-                        $calendar[$dayKey][$currentTime->format('G')] = [];
-                    }
-                    
-                    $calendar[$dayKey][$currentTime->format('G')][$minute] = $fb->isFree($currentTime, $nextTime);
-                }
-            }
-
-            $currentTime->add(new \DateInterval('P1D'));
-        }
-
-        $this->cachedCalendarData = $calendar;
+        $this->cachedCalendarData = $availability;
         return $this;
     }
 
@@ -483,7 +433,7 @@ class Generator
     public function isFree($date, $hour, $minute = 0)
     {
         if (\is_null($this->cachedCalendarData)) {
-            throw new \BadFunctionCallException('Must call FreeBusyCal::fetch() before querying availability');
+            throw new \BadFunctionCallException('Must call Generator::fetch() before querying availability');
         }
 
         if (!isset($this->cachedCalendarData[$date][$hour][$minute])) {
@@ -491,6 +441,23 @@ class Generator
         }
 
         return $this->cachedCalendarData[$date][$hour][$minute];
+    }
+
+    /**
+     * Retrieve the calendar of availability.
+     * 
+     * @return MPorcheron\FreeBusyCal\Availability
+     *  Calendar availability.
+     * @throws \BadFunctionCallException
+     *  If the calendar hasn't been fetched yet.
+     */
+    public function getAvailability()
+    {
+        if (\is_null($this->cachedCalendarData)) {
+            throw new \BadFunctionCallException('Must call Generator::fetch() before querying availability');
+        }
+
+        return $this->cachedCalendarData;
     }
 
     /**
@@ -548,11 +515,9 @@ class Generator
                 
                 foreach ($this->getCalendarDates($dateFormat) as $dt) {
                     if ($this->isFree($dt->format('Y-m-d'), $hour, $minute)) {
-                        $table .= '<td class="avail free"><span>'.
-                            \filter_var($freeText, FILTER_SANITIZE_STRING) .'</span></td>';
+                        $table .= '<td class="avail free">'. $freeText .'</td>';
                     } else {
-                        $table .= '<td class="avail busy"><span>'.
-                            \filter_var($busyText, FILTER_SANITIZE_STRING) .'</span></td>';
+                        $table .= '<td class="avail busy">'. $busyText .'</td>';
                     }
                 }
             }
