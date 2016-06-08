@@ -52,7 +52,7 @@ class FreeBusyCalendar extends \ArrayObject
 	private function _merge(array &$arr) {
 		foreach ($arr as $key => $value) {
 			if (is_array($value)) {
-				_merge($value);
+				$this->_merge($value);
 			} else {
 				$existing = $this->offsetExists($key) ? $this->offsetGet($key) : 0;
 				$this->offsetSet($key, max($existing, $value));
