@@ -14,7 +14,7 @@ namespace MPorcheron\FreeBusyCal;
  *
  * Create a calendar configuration:
  * <code>
- * $cal = (new MPorcheron\FreeBusy\Calendar())
+ * $cal = (new MPorcheron\FreeBusy\UserCalendar())
  *   ->setUsername('ad\username')
  *   ->setPassword('password')
  *   ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
@@ -48,7 +48,7 @@ namespace MPorcheron\FreeBusyCal;
  *
  * Fetch the calendars and process them:
  * <code>
- * $fbc->->fetch();
+ * $fbc->->fetchAndParse();
  * </code>
  *
  * Print out the calendar table, with the class `cal`, default date and time formats, the labels `Free` and `Busy` for
@@ -76,7 +76,7 @@ class Generator
 {
     
     /**
-     * @var MPorcheron\FreeBusyCal\Calendar[] Array of calendars to scrape for data.
+     * @var MPorcheron\FreeBusyCal\UserCalendar[] Array of calendars to scrape for data.
      */
     private $calendars;
 
@@ -119,7 +119,7 @@ class Generator
      * Construct the controller and populate it with the configuration values. Constructing this class sets the time
      * limit for script execution to indefinite and the default timezone because of a PHP oddity.
      *
-     * @param MPorcheron\FreeBusyCal\Calendar $cal,...
+     * @param MPorcheron\FreeBusyCal\UserCalendar $cal,...
      *  Calendars to extract data from.
      */
     public function __construct(&$cal)
@@ -154,7 +154,7 @@ class Generator
     /**
      * Add a calendar to extract data from.
      *
-     * @param MPorcheron\FreeBusyCal\Calendar $cal
+     * @param MPorcheron\FreeBusyCal\UserCalendar $cal
      *  Calendar to also extact data from.
      */
     public function addCalendar(Calendar &$cal)
@@ -173,7 +173,7 @@ class Generator
      * @param boolean $includeWeekends
      *  Set to false to ignore weekends. Note weekennds still count in the number of days (i.e. 7 days, and
      *  `$includeWeekends` starting on a Monday, will show Mon - Fri.)
-     * @return MPorcheron\FreeBusyCal\Calendar
+     * @return MPorcheron\FreeBusyCal\UserCalendar
      *  `$this`.
      */
     public function setDateRange(\DateTime &$startDate, $numDays = 7, $includeWeekends = false)
@@ -283,12 +283,27 @@ class Generator
     }
 
     /**
-     * Fetch and process the data needed to generate the availability calendar.
+     * Fetch and parse the data needed to generate the availability calendar.
      *
+     * @deprecated
+     * @see #fetchAndParse()
      * @return MPorcheron\FreeBusyCal\Generator
      *  `$this`.
      */
     public function fetch()
+    {
+        return $this->fetchAndParse(true);
+    }
+
+    /**
+     * Fetch and parse the data needed to generate the availability calendar.
+     *
+     * @param boolean $refetch
+     *  Refetch iCal data if it has already been fetched once.
+     * @return MPorcheron\FreeBusyCal\Generator
+     *  `$this`.
+     */
+    public function fetchAndParse($refetch = false)
     {
         // Clear object data caches
         $this->cachedCalendarData = null;
@@ -300,9 +315,9 @@ class Generator
         $availability = null;
         foreach ($this->calendars as $cal) {
             if (is_null($availability)) {
-                $availability = $cal->fetch($this->config);
+                $availability = $cal->fetch($refetch)->parse($this->config);
             } else {
-                $availability->merge($cal->fetch($this->config));
+                $availability->merge($cal->fetch($refetch)->parse($this->config));
             }
         }
 
@@ -446,18 +461,27 @@ class Generator
     /**
      * Retrieve the calendar of availability.
      * 
-     * @return MPorcheron\FreeBusyCal\Availability
+     * @return MPorcheron\FreeBusyCal\FreeBusyCalendar
      *  Calendar availability.
      * @throws \BadFunctionCallException
      *  If the calendar hasn't been fetched yet.
      */
-    public function getAvailability()
+    public function getFreeBusyCalendar()
     {
         if (\is_null($this->cachedCalendarData)) {
             throw new \BadFunctionCallException('Must call Generator::fetch() before querying availability');
         }
 
         return $this->cachedCalendarData;
+    }
+
+    /**
+     * @see #getFreeBusyCalendar
+     * @deprecated
+     */
+    public function getAvailability()
+    {
+        return $this->getFreeBusyCalendar();
     }
 
     /**

@@ -9,14 +9,14 @@
 namespace MPorcheron\FreeBusyCal;
 
 /**
- * Container of a person's availability (either one caelndar or multiple).
+ * Calendar of a person's availability (either one caelndar or multiple).
  *
  * @author Martin Porcheron <martin@porcheron.uk>
  * @copyright (c) Martin Porcheron 2016.
  * @license MIT Licence
  */
 
-class Availability extends \ArrayObject
+class FreeBusyCalendar extends \ArrayObject
 {
 
 	/**
@@ -29,17 +29,17 @@ class Availability extends \ArrayObject
 	 * @param stirng iterator_class
 	 * 	Specify the class that will be used for iteration of the ArrayObject object.
 	 */
-	public function __construct($input = [], $flags = 0,$iterator_class = 'ArrayIterator') {
+	public function __construct($input = [], $flags = 0, $iterator_class = 'ArrayIterator') {
 		parent::__construct($input, $flags, $iterator_class);
 	}
 
 	/**
 	 * Merge availability data. If busy, will remain busy.
 	 * 
-	 * @param MPorcheron\FreeBusyCal\Availability $cal
+	 * @param MPorcheron\FreeBusyCal\FreeBusyCalendar $cal
 	 * 	Availability matrix to merge.
 	 */
-	public function merge(MPorcheron\FreeBusyCal\Availability $cal) {
+	public function merge(MPorcheron\FreeBusyCal\FreeBusyCalendar $cal) {
 		$this->_merge($cal->getArrayCopy());
 	}
 

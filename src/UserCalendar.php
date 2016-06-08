@@ -19,12 +19,12 @@ use Sabre\VObject\FreeBusyGenerator;
  * @license MIT Licence
  */
 
-class Calendar extends \ArrayObject
+class UserCalendar extends \ArrayObject
 {
     /**
      * @var string iCal file.
      */
-    private $iCal;
+    private $iCal = null;
 
     /**
      * @var mixed[] Configuration data.
@@ -51,7 +51,7 @@ class Calendar extends \ArrayObject
      *
      * @param string $username
      *  New username to login with. Leave blank to disable.
-     * @return MPorcheron\FreeBusyCal\Calendar
+     * @return MPorcheron\FreeBusyCal\UserCalendar
      *  `$this`.
      */
     public function setUsername($username = '')
@@ -65,7 +65,7 @@ class Calendar extends \ArrayObject
      *
      * @param string $password
      *  New password to login with. Leave blank to disable.
-     * @return MPorcheron\FreeBusyCal\Calendar
+     * @return MPorcheron\FreeBusyCal\UserCalendar
      *  `$this`.
      */
     public function setPassword($password = '')
@@ -79,7 +79,7 @@ class Calendar extends \ArrayObject
      *
      * @param string $url
      *  New URL to connect to.
-     * @return MPorcheron\FreeBusyCal\Calendar
+     * @return MPorcheron\FreeBusyCal\UserCalendar
      *  `$this`.
      */
     public function setUrl($url)
@@ -110,7 +110,7 @@ class Calendar extends \ArrayObject
      *
      * @param boolean $ssl
      *  Set to {@code true} to connect with SSL.
-     * @return MPorcheron\FreeBusyCal\Calendar
+     * @return MPorcheron\FreeBusyCal\UserCalendar
      *  `$this`.
      */
     public function enableSsl($ssl)
@@ -120,15 +120,33 @@ class Calendar extends \ArrayObject
     }
 
     /**
-     * Fetch and process the data needed to generate the availability calendar.
-     *
-     * @param mixed[] $config
-     *  Configuration data.
-     * @return MPorcheron\FreeBusyCal\Availability
-     *  Availability for the calendar.
+     * Set the iCal file to parsed. Note: no validation occurs!
+     * 
+     * @param string $iCal
+     *  iCal file to be parsed.
+     * @return MPorcheron\FreeBusyCal\UserCalendar
+     *  `$this`.
      */
-    public function fetch(array $config)
+    public function setiCal($iCal) {
+        $this->iCal = $iCal;
+        return $this;
+    }
+
+    /**
+     * Fetch the data needed to generate the availability calendar. If the iCal 
+     * data is already set, fetching is skipped unless {@code $refetch} is {@code true}
+     *
+     * @param boolean $refetch
+     *  Refetch iCal data if it has already been fetched once.
+     * @return MPorcheron\FreeBusyCal\UserCalendar
+     *  `$this`.
+     */
+    function fetch($refetch = false)
     {
+        if (!$refetch && $this->iCal != null) {
+            return $this;
+        }
+
         include_once 'lib/awl/CalendarInfo.php';
         include_once 'lib/awl/CalDAVClient.php';
 
@@ -157,7 +175,24 @@ class Calendar extends \ArrayObject
         $contents = "BEGIN:VCALENDAR\n" . \preg_replace("/(BEGIN|END):VCALENDAR\n/", "", $contents) . "END:VCALENDAR";
         $this->iCal = \preg_replace("/\n\s/", "", $contents);
 
-        // Process calendars
+        return $this;
+    }
+
+    /**
+     * Parse the iCal file needed to generate the availability calendar.
+     *
+     * @param mixed[] $config
+     *  Configuration data.
+     * @return MPorcheron\FreeBusyCal\FreeBusyCalendar
+     *  Availability for the calendar.
+     * @throws \BadFunctionCallException
+     *  If the iCal data hasn't been fetched/set yet.
+     */
+    public function parse(array $config) {
+        if (\is_null($this->iCal)) {
+            throw new \BadFunctionCallException('Must call UserCalendar::fetch() or UserCalendar::setiCal() before parsing iCal');
+        }
+
         $vcal = Reader::read($this->iCal, Reader::OPTION_FORGIVING|Reader::OPTION_IGNORE_INVALID_LINES);
         $fbGenerator = new FreeBusyGenerator($config['startDate'], $config['endDate'], $vcal);
         $cmnts = $fbGenerator->getResult()->getComponents();
@@ -196,6 +231,6 @@ class Calendar extends \ArrayObject
             $currentTime->add(new \DateInterval('P1D'));
         }
 
-        return new Availability($calendar);
+        return new FreeBusyCalendar($calendar);
     }
 }

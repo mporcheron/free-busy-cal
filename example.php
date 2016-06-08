@@ -15,17 +15,22 @@ use MPorcheron\FreeBusyCal as Fbc;
 
 // Configuration of calendars //////////////////////////////////////////////////////////////////////////////////////////
 
-$cal = (new Fbc\Calendar())
+$cal = (new Fbc\UserCalendar())
     ->setUsername('ad\username')
     ->setPassword('password')
     ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
 
-$fbc = (new Fbc\Generator($cal))
+$cal2 = (new Fbc\UserCalendar())
+    ->setUsername('username')
+    ->setPassword('password')
+    ->setUrl('https://caldav.example.com/users/username@example.com/calendar');
+
+$fbc = (new Fbc\Generator($cal, $cal2))
     ->setDateRange(new \DateTime('Monday this week'), 14, false)
     ->setTimeRange(9, 17, 30)
     ->setDayLabels('M', 'T', 'W', 'T', 'F', 'S', 'S')
     ->setWeeksPerRow(2)
-    ->fetch();
+    ->fetchAndParse();
 
 // Output the calendar /////////////////////////////////////////////////////////////////////////////////////////////////
 
