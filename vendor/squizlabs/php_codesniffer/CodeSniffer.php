@@ -73,7 +73,7 @@ class PHP_CodeSniffer
      *
      * @var string
      */
-    const VERSION = '2.5.1';
+    const VERSION = '2.6.1';
 
     /**
      * Package stability; either stable, beta or alpha.
@@ -128,6 +128,16 @@ class PHP_CodeSniffer
      * @var array(string)
      */
     protected $sniffs = array();
+
+    /**
+     * A mapping of sniff codes to fully qualified class names.
+     *
+     * The key is the sniff code and the value
+     * is the fully qualified name of the sniff class.
+     *
+     * @var array<string, string>
+     */
+    public $sniffCodes = array();
 
     /**
      * The listeners array, indexed by token type.
@@ -717,6 +727,19 @@ class PHP_CodeSniffer
             $ownSniffs = $this->_expandSniffDirectory($rulesetDir.DIRECTORY_SEPARATOR.'Sniffs', $depth);
         }
 
+        // Process custom sniff config settings.
+        foreach ($ruleset->{'config'} as $config) {
+            if ($this->_shouldProcessElement($config) === false) {
+                continue;
+            }
+
+            $this->setConfigData((string) $config['name'], (string) $config['value'], true);
+            if (PHP_CODESNIFFER_VERBOSITY > 1) {
+                echo str_repeat("\t", $depth);
+                echo "\t=> set config value ".(string) $config['name'].': '.(string) $config['value'].PHP_EOL;
+            }
+        }
+
         foreach ($ruleset->rule as $rule) {
             if (isset($rule['ref']) === false
                 || $this->_shouldProcessElement($rule) === false
@@ -818,7 +841,7 @@ class PHP_CodeSniffer
             }
         }//end foreach
 
-        if (empty($cliValues['files']) === true) {
+        if (empty($cliValues['files']) === true && $cliValues['stdin'] === null) {
             // Process hard-coded file paths.
             foreach ($ruleset->{'file'} as $file) {
                 $file      = (string) $file;
@@ -831,19 +854,19 @@ class PHP_CodeSniffer
         }
 
         if (empty($cliArgs) === false) {
-            $this->cli->setCommandLineValues($cliArgs);
-        }
-
-        // Process custom sniff config settings.
-        foreach ($ruleset->{'config'} as $config) {
-            if ($this->_shouldProcessElement($config) === false) {
-                continue;
+            // Change the directory so all relative paths are worked
+            // out based on the location of the ruleset instead of
+            // the location of the user.
+            $inPhar = self::isPharFile($rulesetDir);
+            if ($inPhar === false) {
+                $currentDir = getcwd();
+                chdir($rulesetDir);
             }
 
-            $this->setConfigData((string) $config['name'], (string) $config['value'], true);
-            if (PHP_CODESNIFFER_VERBOSITY > 1) {
-                echo str_repeat("\t", $depth);
-                echo "\t=> set config value ".(string) $config['name'].': '.(string) $config['value'].PHP_EOL;
+            $this->cli->setCommandLineValues($cliArgs);
+
+            if ($inPhar === false) {
+                chdir($currentDir);
             }
         }
 
@@ -1402,6 +1425,7 @@ class PHP_CodeSniffer
             $code = substr($code, 0, -5);
 
             $this->listeners[$listenerClass] = new $listenerClass();
+            $this->sniffCodes[$code]         = $listenerClass;
 
             // Set custom properties.
             if (isset($this->ruleset[$code]['properties']) === true) {
@@ -1694,6 +1718,7 @@ class PHP_CodeSniffer
         $firstContent = $contents;
         if ($contents === null && is_readable($filePath) === true) {
             $handle = fopen($filePath, 'r');
+            stream_set_blocking($handle, true);
             if ($handle !== false) {
                 $firstContent  = fgets($handle);
                 $firstContent .= fgets($handle);

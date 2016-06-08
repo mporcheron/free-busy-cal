@@ -1,15 +1,14 @@
 <?php
 
-namespace Sabre\VObject;
+namespace Sabre\VObject\Recur\EventIterator;
 
-use
-    DateTime,
-    DateTimeZone;
+use Sabre\VObject\Reader;
+use Sabre\VObject\Recur\EventIterator;
 
 class Issue26Test extends \PHPUnit_Framework_TestCase {
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Sabre\VObject\InvalidDataException
      */
     function testExpand() {
 
@@ -28,8 +27,7 @@ ICS;
         $vcal = Reader::read($input);
         $this->assertInstanceOf('Sabre\\VObject\\Component\\VCalendar', $vcal);
 
-        $it = new Recur\EventIterator($vcal, 'bae5d57a98');
-        iterator_to_array($it);
+        $it = new EventIterator($vcal, 'bae5d57a98');
 
     }
 
