@@ -4,79 +4,105 @@
  * This file is the main FreeBusyCal generator used to retrieve and generate a free/busy calendar. See the class
  * description for example usage.
  *
- * @package MPorcheron\FreeBusyCal
+ * @package \MPorcheron\FreeBusyCal
  */
 
-namespace MPorcheron\FreeBusyCal;
+namespace \MPorcheron\FreeBusyCal;
 
 /**
  * FreeBusyCal generator.
  *
  * Create a calendar configuration:
- * <code>
- * $cal = (new MPorcheron\FreeBusy\UserCalendar())
- *   ->setUsername('ad\username')
- *   ->setPassword('password')
- *   ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
- * </code>
+ * 
+ *      $cal = new \MPorcheron\FreeBusy\UserCalendar();
+ *      $cal->setUsername('ad\username');
+ *      $cal->setPassword('password');
+ *      $cal->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
+ * 
  *
  * Create the Generator object and add the calendar:
- * <code>
- * $fbc = (new MPorcheron\FreeBusyCal\Generator($cal));
- * </code>
+ * 
+ *      $fbc = new \MPorcheron\FreeBusyCal\Generator($cal);
+ * 
  *
  * Set the date range to extract, e.g. start from this Monday, and run for 14 days (i.e. two weeks), but exclude
  * weekends:
- * <code>
- * $fbc->setDateRange(new \DateTime('Monday this week'), 14, false);
- * </code>
+ * 
+ *      $fbc->setDateRange(new \DateTime('Monday this week'), 14, false);
+ * 
  *
  * Only generate a calendar between 9am (inclusive) and 5pm (exclusive), and show a slot every 30 minutes:
- * <code>
- * $fbc->setTimeRange(9, 17, 30);
- * </code>
- *
- * Label the days in our output (optional, depends on if you use the built in output):
- * <code>
- * $fbc->setDayLabels('M', 'T', 'W', 'T', 'F', 'S', 'S');
- * </code>
- *
- * Show two weeks horizontally (optional, depends on if you use the built in output):
- * <code>
- * $fbc->setWeeksPerRow(2);
- * </code>
+ * 
+ *      $fbc->setTimeRange(9, 17, 30);
+ * 
  *
  * Fetch the calendars and process them:
- * <code>
- * $fbc->->fetchAndParse();
- * </code>
+ * 
+ *      $fbc->->fetchAndParse();
+ * 
  *
  * Print out the calendar table, with the class `cal`, default date and time formats, the labels `Free` and `Busy` for
  *  slots, and show times as ranges (i.e. start – end) as opposed to just start time:
- * <code>
- * echo $fbc->getTable('class="cal"',
- *  MPorcheron\FreeBusyCal\Generator::DATE_FORMAT,
- *  MPorcheron\FreeBusyCal\Generator::TIME_FORMAT,
- *  'Free',
- *  'Busy',
- *  true);
- * </code>
+ * 
+ *     $contents = $fbc->generate(function (Fbc\FreeBusyCalendar &$cal) {
+ *         $output = '<table class="cal">';
+ *
+ *         // Output table headers with days
+ *         $output .= '<tr><th></th>';
+ *         $days = [ 'S', 'M', 'T', 'W', 'T', 'F', 'S' ];
+ *         foreach ($cal->getCalendarDates(Fbc\FreeBusyCalendar::DATE_FORMAT) as $label => &$dt) {
+ *             $output .= '<th class="day">'. $days[$dt->format('N')] .'</th>';
+ *         }
+ *         $output .= '</tr>';
+ *
+ *         // Output table headers with dates
+ *         $output .= '<tr><th></th>';
+ *         foreach ($cal->getCalendarDates(Fbc\FreeBusyCalendar::DATE_FORMAT) as $label => &$dt) {
+ *             $output .= '<th class="date">'. $label .'</th>';
+ *         }
+ *         $output .= '</tr>';
+ *
+ *         // Iterate through each time and $output .= the availability
+ *         $times = $cal->getCalendarTimes(Fbc\FreeBusyCalendar::TIME_FORMAT);
+ *         foreach ($times as $hour => $temp) {
+ *             foreach ($temp as $minute => $labels) {
+ *                 $output .= '<tr><td class="time">'. $labels[0];
+ *                 if ($showRange) {
+ *                     $output .= '&nbsp;&ndash;&nbsp;' . $labels[1];
+ *                 }
+ *                 $output .= '</td>';
+ *
+ *                 foreach ($cal->getCalendarDates(Fbc\FreeBusyCalendar::DATE_FORMAT) as $dt) {
+ *                     if ($cal->isFree($dt->format('Y-m-d'), $hour, $minute)) {
+ *                         $output .= '<td class="avail free">Free</td>';
+ *                     } else {
+ *                         $output .= '<td class="avail busy">Busy</td>';
+ *                     }
+ *                 }
+ *             }
+ *             $output .= '</td>';
+ *         }
+ *         $output .= '</table>';
+ *
+ *         return $output;
+ *     });
  *
  * Alternatively test if a specific time/date (i.e. 5pm on 4th May 2016) is available:
- * <code>
- * $free = $fbc->isFree('2016-05-04', 17, 0);
- * </code>
+ * 
+ *      $cal = $fbc->getFreeBusyCalendar();
+ *      $free = $cal->isFree('2016-05-04', 17, 0);
+ * 
  *
- * @author Martin Porcheron <martin@porcheron.uk>
+ * @author    Martin Porcheron <martin@porcheron.uk>
  * @copyright (c) Martin Porcheron 2016.
- * @license MIT Licence
+ * @license   MIT Licence
  */
 
 class Generator
 {
     
     /**
-     * @var MPorcheron\FreeBusyCal\UserCalendar[] Array of calendars to scrape for data.
+     * @var \MPorcheron\FreeBusyCal\UserCalendar[] Array of calendars to scrape for data.
      */
     private $calendars;
 
@@ -86,41 +112,18 @@ class Generator
     private $config;
 
     /**
-     * @var mixed[] Cached calendar data.
+     * @var \MPorcheron\FreeBusyCal\FreeBusyCalendar Cached calendar data.
      */
-    private $cachedCalendarData = null;
-
-    /**
-     * @var mixed[] Cached calendar days.
-     */
-    private $cachedCalendarDays = null;
-
-    /**
-     * @var mixed[] Cached calendar dates.
-     */
-    private $cachedCalendarDates = [];
-
-    /**
-     * @var mixed[] Cached calendar times.
-     */
-    private $cachedCalendarTimes = [];
-
-    /**
-     * @var string Default date format.
-     */
-    const DATE_FORMAT = 'j/n';
-
-    /**
-     * @var string Default time format.
-     */
-    const TIME_FORMAT = 'G:i';
+    private $freeBusyCalendar = null;
 
     /**
      * Construct the controller and populate it with the configuration values. Constructing this class sets the time
      * limit for script execution to indefinite and the default timezone because of a PHP oddity.
      *
-     * @param MPorcheron\FreeBusyCal\UserCalendar $cal,...
-     *  Calendars to extract data from.
+     * Output buffering is started also.
+     *
+     * @param \MPorcheron\FreeBusyCal\UserCalendar $cal
+     *  (One or more) calendars to extract data from.
      */
     public function __construct(&$cal)
     {
@@ -136,25 +139,24 @@ class Generator
             'startHour' => 9,
             'endHour' => 17,
             'interval' => 60,
-            'daysOfTheWeek' => [ 'M', 'T', 'W', 'T', 'F', 'S', 'S' ],
-            'weeksPerRow' => 2,
             'includeWeekends' => false];
     }
 
     /**
      * Get the congiruation data.
-     * 
+     *
      * @return mixed[]
      *  Configuration data.
      */
-    public function getConfig() {
+    public function getConfig()
+    {
         return $this->config;
     }
 
     /**
      * Add a calendar to extract data from.
      *
-     * @param MPorcheron\FreeBusyCal\UserCalendar $cal
+     * @param \MPorcheron\FreeBusyCal\UserCalendar $cal
      *  Calendar to also extact data from.
      */
     public function addCalendar(Calendar &$cal)
@@ -165,15 +167,15 @@ class Generator
     /**
      * Set the date range to generate data for.
      *
-     * @see http://php.net/manual/en/datetime.construct.php
-     * @param \DateTime $startDate
+     * @see    http://php.net/manual/en/datetime.construct.php
+     * @param  \DateTime $startDate
      *  When to start the calendar from.
-     * @param int $length
+     * @param  int       $length
      *  Number of days from the start date to generate calendar for.
-     * @param boolean $includeWeekends
+     * @param  boolean   $includeWeekends
      *  Set to false to ignore weekends. Note weekennds still count in the number of days (i.e. 7 days, and
      *  `$includeWeekends` starting on a Monday, will show Mon - Fri.)
-     * @return MPorcheron\FreeBusyCal\UserCalendar
+     * @return \MPorcheron\FreeBusyCal\UserCalendar
      *  `$this`.
      */
     public function setDateRange(\DateTime &$startDate, $numDays = 7, $includeWeekends = false)
@@ -194,66 +196,18 @@ class Generator
     }
 
     /**
-     * Set the labels for each day.
-     *
-     * @param string $mon
-     *  Label for Monday.
-     * @param string $tues
-     *  Label for Tuesday.
-     * @param string $wed
-     *  Label for Wednesday.
-     * @param string $thurs
-     *  Label for Thurs.
-     * @param string $fri
-     *  Label for Friday.
-     * @param string $sat
-     *  Label for Saturday.
-     * @param string $sun
-     *  Label for Sunday.
-     * @return MPorcheron\FreeBusyCal\Generator
-     *  `$this`.
-     */
-    public function setDayLabels($mon, $tues, $wed, $thurs, $fri, $sat, $sun)
-    {
-        $arr = [];
-        foreach (\func_get_args() as $label) {
-            $labels[] = \filter_var($label, FILTER_SANITIZE_STRING);
-        }
-        $this->config['daysOfTheWeek'] = $labels;
-        return $this;
-    }
-
-    /**
-     * Number of weeks to show per calendar row.
-     *
-     * @param int $weeksPerRow
-     *  Number of weeks to show horizontally.
-     * @return MPorcheron\FreeBusyCal\Generator
-     *  `$this`.
-     */
-    public function setWeeksPerRow($weeksPerRow)
-    {
-        $this->config['weeksPerRow'] = \filter_var(
-            $weeksPerRow,
-            FILTER_SANITIZE_NUMBER_INT,
-            ['options' => ['default' => 2, 'min_range' => 1]]
-        );
-        return $this;
-    }
-
-    /**
      * Set the time range to generate data for.
      *
-     * @see http://php.net/manual/en/datetime.construct.php
-     * @param int $startHour
+     * @see    http://php.net/manual/en/datetime.construct.php
+     * @param  int $startHour
      *  First hour of the day to start output at (midnight = `0`). Minimum is `1`, maximum is `22`, default is `9`.
-     * @param int $endHour
+     * @param  int $endHour
      *  Last hour of the day print output for (midnight = 0). Minimum is `$startHour`, maximum is `23`, default is `17`.
-     * @param int $interval
+     * @param  int $interval
      *  How many mniutes to break each slot in the calendar up by (60 = segment by hour). You should make this number
      *  one of the following to fit evenly into the hour: 1,2,3,4,5,6,10,12,15,20,30,60. Minumum is `1`, maximum is
      *  `60`, default is `60`.
-     * @return MPorcheron\FreeBusyCal\Generator
+     * @return \MPorcheron\FreeBusyCal\Generator
      *  `$this`.
      */
     public function setTimeRange($startHour, $endHour, $interval = 60)
@@ -285,270 +239,65 @@ class Generator
     /**
      * Fetch and parse the data needed to generate the availability calendar.
      *
-     * @deprecated
-     * @see #fetchAndParse()
-     * @return MPorcheron\FreeBusyCal\Generator
-     *  `$this`.
-     */
-    public function fetch()
-    {
-        return $this->fetchAndParse(true);
-    }
-
-    /**
-     * Fetch and parse the data needed to generate the availability calendar.
-     *
-     * @param boolean $refetch
+     * @param  boolean $refetch
      *  Refetch iCal data if it has already been fetched once.
-     * @return MPorcheron\FreeBusyCal\Generator
+     * @return \MPorcheron\FreeBusyCal\Generator
      *  `$this`.
      */
     public function fetchAndParse($refetch = false)
     {
         // Clear object data caches
-        $this->cachedCalendarData = null;
-        $this->cachedCalendarDays = null;
-        $this->cachedCalendarDates = [];
-        $this->cachedCalendarTimes = [];
+        $this->freeBusyCalendar = null;
 
         // Fetch data from the CalDAV server
-        $availability = null;
+        $freeBusyCalendar = null;
         foreach ($this->calendars as $cal) {
-            if (is_null($availability)) {
-                $availability = $cal->fetch($refetch)->parse($this->config);
+            if (is_null($freeBusyCalendar)) {
+                $freeBusyCalendar = $cal->fetch($refetch)->parse($this->config);
             } else {
-                $availability->merge($cal->fetch($refetch)->parse($this->config));
+                $freeBusyCalendar->merge($cal->fetch($refetch)->parse($this->config));
             }
         }
 
-        $this->cachedCalendarData = $availability;
+        $this->freeBusyCalendar = $freeBusyCalendar->setConfig($this->config);
+
         return $this;
     }
 
     /**
-     * Retrieve the labels for the calendar days to be displayed.
+     * Generates the calendar and returs output.
      *
-     * @return string[]
-     *  Array of the calendar days to be displayed.
-     */
-    public function getCalendarDays()
-    {
-        if (!is_null($this->cachedCalendarDays)) {
-            return $this->cachedCalendarDays;
-        }
-
-        $dayOffset = $this->config['startDate']->format('N') - 1;
-        $days = [];
-        for ($i = 0; $i < $this->config['weeksPerRow'] * 7; $i++) {
-            $dayNum = ($i + $dayOffset) % 7;
-
-            if (!$this->config['includeWeekends'] && $dayNum > 4) {
-                continue;
-            }
-            $days[] = $this->config['daysOfTheWeek'][$dayNum];
-        }
-
-        $this->cachedCalendarDays = $days;
-        return $days;
-    }
-
-    /**
-     * Retrieve the values labels for the calendar dates to be displayed.
-     *
-     * @see http://php.net/manual/en/datetime.construct.php
-     * @param string $format
-     *  PHP `date` format the dates to be displayed.
-     * @return string[]
-     *  Array of the calendar dates to be displayed.
-     */
-    public function getCalendarDates($format = self::DATE_FORMAT)
-    {
-        if (!empty($this->cachedCalendarDates) && isset($this->cachedCalendarDates[$format])) {
-            return $this->cachedCalendarDates[$format];
-        }
-
-        $dates = [];
-        $currentDate = clone $this->config['startDate'];
-        for ($day = 0; $day < $this->config['numDays']; $day++) {
-            if ($this->config['includeWeekends'] || $currentDate->format('N') <= 5) {
-                $dates[$currentDate->format($format)] = clone $currentDate;
-            }
-
-            $currentDate->add(new \DateInterval('P1D'));
-        }
-
-        $this->cachedCalendarDates[$format] = $dates;
-        return $dates;
-    }
-
-    /**
-     * Retrieve the values labels for the calendar times to be displayed. At the moment, only hours are supported.
-     *
-     * @see http://php.net/manual/en/datetime.construct.php
-     * @param string $format
-     *  PHP `date` format the times to be displayed.
-     * @return string[]
-     *  Array of the calendar times to be displayed.
-     *  `[YYYY-mm-dd][hour][minute] => [current time formatted, next time formatted]`
-     */
-    public function getCalendarTimes($format = self::TIME_FORMAT)
-    {
-        if (!empty($this->cachedCalendarTimes) && isset($this->cachedCalendarTimes[$format])) {
-            return $this->cachedCalendarTimes[$format];
-        }
-
-        $times = [];
-        $interval = $this->config['interval'];
-        for ($hour = $this->config['startHour'], $minute = 0, $nextHour = $this->config['startHour'], $nextMinute = 0;
-            $hour < $this->config['endHour'];
-            $hour = $nextHour, $minute = $nextMinute) {
-            $nextHour = $hour + floor(($minute + $interval) / 60);
-            $nextMinute = ($minute + $interval) % 60;
-
-            if (!isset($times[$hour])) {
-                $times[$hour] = [];
-            }
-
-            $times[$hour][$minute] = [
-                \date($format, \strtotime($hour .':' . $minute)),
-                \date($format, \strtotime($nextHour .':' . $nextMinute)), ];
-        }
-
-        $this->cachedCalendarTimes[$format] = $times;
-        return $times;
-    }
-
-    /**
-     * Retrieve the availability for the calendar times to be displayed.
-     *
-     * @return boolean[]
-     *  Array of the calendar availability to be displayed.
-     */
-    public function getCalendarData()
-    {
-        return $this->cachedCalendarData;
-    }
-
-    /**
-     * Determine if we are available at a given time.
-     *
-     * @param string $date
-     *  Date to check if available in YYYY-mm-dd format.
-     * @param string $hour
-     *  Hour to check if available.
-     * @param string $minute
-     *  Minute to check if available.
-     * @return boolean
-     *  `true` if available, false otherwise.
-     * @throws \OutOfBoundsException
-     *  If the queried date or time is out of the given calendar range.
+     * @param  function $func
+     *  Function that takes a single paramter of a \MPorcheron\FreeBusyCal\FreeBusyCalendar` and returns out the output 
+     *  as a string.
+     * @return \MPorcheron\FreeBusyCal\Generator
+     *  Output from the print function.
      * @throws \BadFunctionCallException
      *  If the calendar hasn't been fetched yet.
      */
-    public function isFree($date, $hour, $minute = 0)
+    public function generate($func)
     {
-        if (\is_null($this->cachedCalendarData)) {
-            throw new \BadFunctionCallException('Must call Generator::fetch() before querying availability');
+        if (\is_null($this->freeBusyCalendar)) {
+            throw new \BadFunctionCallException('Must call Generator::fetchAndParse() before querying availability');
         }
 
-        if (!isset($this->cachedCalendarData[$date][$hour][$minute])) {
-            throw new \OutOfBoundsException('Time tested for availbility must be in calendar range');
-        }
-
-        return $this->cachedCalendarData[$date][$hour][$minute];
+        return $func($this->freeBusyCalendar);
     }
 
     /**
      * Retrieve the calendar of availability.
-     * 
-     * @return MPorcheron\FreeBusyCal\FreeBusyCalendar
+     *
+     * @return \MPorcheron\FreeBusyCal\FreeBusyCalendar
      *  Calendar availability.
      * @throws \BadFunctionCallException
      *  If the calendar hasn't been fetched yet.
      */
     public function getFreeBusyCalendar()
     {
-        if (\is_null($this->cachedCalendarData)) {
-            throw new \BadFunctionCallException('Must call Generator::fetch() before querying availability');
+        if (\is_null($this->freeBusyCalendar)) {
+            throw new \BadFunctionCallException('Must call Generator::fetchAndParse() before querying availability');
         }
 
-        return $this->cachedCalendarData;
-    }
-
-    /**
-     * @see #getFreeBusyCalendar
-     * @deprecated
-     */
-    public function getAvailability()
-    {
-        return $this->getFreeBusyCalendar();
-    }
-
-    /**
-     * Output the processed calendar data.
-     *
-     * @see http://php.net/manual/en/datetime.construct.php
-     * @param string $tableAttrs
-     *  HTML attributes for the table object.
-     * @param string $dateFormat
-     *  PHP `date` format the dates to be displayed.
-     * @param string $timeFormat
-     *  PHP `date` format the times to be displayed.
-     * @param string $freeText
-     *  Text for an available slot.
-     * @param string $busyText
-     *  Text for a busy slot.
-     * @param boolean $showRange
-     *  Show the start and end time for a slot (if `true`), seperated with two non-breaking spaces and an en-dash.
-     * @return string
-     *  Calendar of availbility.
-     */
-    public function getTable(
-        $tableAttrs = '',
-        $dateFormat = self::DATE_FORMAT,
-        $timeFormat = self::TIME_FORMAT,
-        $freeText = 'Free',
-        $busyText = 'Busy',
-        $showRange = false
-    ) {
-        $table = '<table '. $tableAttrs .'>';
-
-        // Output table headers with days
-        $table .= '<tr><th></th>';
-        foreach ($this->getCalendarDays() as $day) {
-            $table .= '<th class="day">'. $day .'</th>';
-        }
-        $table .= '</tr>';
-
-        // Output table headers with dates
-        $table .= '<tr><th></th>';
-        foreach ($this->getCalendarDates($dateFormat) as $label => &$dt) {
-            $table .= '<th class="date">'. $label .'</th>';
-        }
-        $table .= '</tr>';
-
-        // Iterate through each time and print the availability
-        $times = $this->getCalendarTimes($timeFormat);
-        foreach ($times as $hour => $temp) {
-            foreach ($temp as $minute => $labels) {
-                $table .= '<tr><td class="time">'. $labels[0];
-                if ($showRange) {
-                    $table .= '&nbsp;&ndash;&nbsp;' . $labels[1];
-                }
-                $table .= '</td>';
-                
-                foreach ($this->getCalendarDates($dateFormat) as $dt) {
-                    if ($this->isFree($dt->format('Y-m-d'), $hour, $minute)) {
-                        $table .= '<td class="avail free">'. $freeText .'</td>';
-                    } else {
-                        $table .= '<td class="avail busy">'. $busyText .'</td>';
-                    }
-                }
-            }
-            $table .= '</td>';
-        }
-        $table .= '</table>';
-
-        return $table;
+        return $this->freeBusyCalendar;
     }
 }

@@ -258,3 +258,4 @@ class UserCalendar extends \ArrayObject
         return new FreeBusyCalendar($calendar);
     }
 }
+
