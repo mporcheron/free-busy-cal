@@ -15,17 +15,20 @@ use MPorcheron\FreeBusyCal as Fbc;
 
 // Configuration of calendars //////////////////////////////////////////////////////////////////////////////////////////
 
-$cal = (new Fbc\Calendar())
+$cal = (new Fbc\UserCalendar())
     ->setUsername('ad\username')
     ->setPassword('password')
     ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
 
-$fbc = (new Fbc\Generator($cal))
+$cal2 = (new Fbc\UserCalendar())
+    ->setUsername('username')
+    ->setPassword('password')
+    ->setUrl('https://caldav.example.com/users/username@example.com/calendar');
+
+$fbc = (new Fbc\Generator($cal, $cal2))
     ->setDateRange(new \DateTime('Monday this week'), 14, false)
     ->setTimeRange(9, 17, 30)
-    ->setDayLabels('M', 'T', 'W', 'T', 'F', 'S', 'S')
-    ->setWeeksPerRow(2)
-    ->fetch();
+    ->fetchAndParse();
 
 // Output the calendar /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -102,13 +105,51 @@ echo <<<HEADER
 
 HEADER;
 
-echo $fbc->get(
-    'class="cal"',
-    Fbc\Generator::DATE_FORMAT,
-    Fbc\Generator::TIME_FORMAT,
-    'Free',
-    'Busy',
-    true);
+echo $fbc-generate(function (Fbc\FreeBusyCalendar &$cal) {
+    // Show time range, or just start time
+    $showRange = true;
+
+    $output = '<table class="cal">';
+
+    // Output table headers with days
+    $output .= '<tr><th></th>';
+    $days = [ 'S', 'M', 'T', 'W', 'T', 'F', 'S' ];
+    foreach ($cal->getCalendarDates(Fbc\FreeBusyCalendar::DATE_FORMAT) as $label => &$dt) {
+        $output .= '<th class="day">'. $days[$dt->format('N')] .'</th>';
+    }
+    $output .= '</tr>';
+
+    // Output table headers with dates
+    $output .= '<tr><th></th>';
+    foreach ($cal->getCalendarDates(Fbc\FreeBusyCalendar::DATE_FORMAT) as $label => &$dt) {
+        $output .= '<th class="date">'. $label .'</th>';
+    }
+    $output .= '</tr>';
+
+    // Iterate through each time and $output .= the availability
+    $times = $cal->getCalendarTimes(Fbc\FreeBusyCalendar::TIME_FORMAT);
+    foreach ($times as $hour => $temp) {
+        foreach ($temp as $minute => $labels) {
+            $output .= '<tr><td class="time">'. $labels[0];
+            if ($showRange) {
+                $output .= '&nbsp;&ndash;&nbsp;' . $labels[1];
+            }
+            $output .= '</td>';
+            
+            foreach ($cal->getCalendarDates(Fbc\FreeBusyCalendar::DATE_FORMAT) as $dt) {
+                if ($cal->isFree($dt->format('Y-m-d'), $hour, $minute)) {
+                    $output .= '<td class="avail free">Free</td>';
+                } else {
+                    $output .= '<td class="avail busy">Busy</td>';
+                }
+            }
+        }
+        $output .= '</td>';
+    }
+    $output .= '</table>';
+
+    return $output;
+});
 
 echo <<<FOOTER
 
