@@ -14,7 +14,7 @@ Create a calendar configuration:
 
 Create the Generator object and add the calendar:
 
-    $fbc = (new MPorcheron\FreeBusyCal\Generator($cal));
+	$fbc = new \MPorcheron\FreeBusyCal\Generator($cal);
 
 
 Set the date range to extract, e.g. start from this Monday, and run for 14 days (i.e. two weeks), but exclude
@@ -28,35 +28,62 @@ Only generate a calendar between 9am (inclusive) and 5pm (exclusive):
     $fbc->setTimeRange(9, 17);
 
 
-Label the days in our output (optional, depends on if you use the built in output):
-
-    $fbc->setDayLabels('M', 'T', 'W', 'T', 'F', 'S', 'S');
-
-
-Show two weeks horizontally (optional, depends on if you use the built in output):
-
-    $fbc->setWeeksPerRow(2);
-
-
 Fetch the calendars and process them:
 
-    $fbc->->fetch();
+    $fbc->fetchAndParse();
 
 
-Print out the calendar table, with the class `cal`, default date and time formats, the labels `Free` and `Busy` for
-slots, and show times as ranges (i.e. start – end) as opposed to just start time:
+Print out the calendar as a table, default date and time formats, the labels `Free` and `Busy` for
+slots, and show times as ranges (i.e. start – end):
 
-    echo $fbc->getTable('class="cal"', 
-     MPorcheron\FreeBusyCal\Generator::DATE_FORMAT,
-     MPorcheron\FreeBusyCal\Generator::TIME_FORMAT, 
-     'Free',
-     'Busy'
-     true);
+    $contents = $fbc->generate(function (Fbc\FreeBusyCalendar &$cal) {
+        $output = '<table class="cal">';
+
+        // Output table headers with days
+        $output .= '<tr><th></th>';
+        $days = [ 'S', 'M', 'T', 'W', 'T', 'F', 'S' ];
+        foreach ($cal->getCalendarDates(Fbc\FreeBusyCalendar::DATE_FORMAT) as $label => &$dt) {
+            $output .= '<th class="day">'. $days[$dt->format('N')] .'</th>';
+        }
+        $output .= '</tr>';
+
+        // Output table headers with dates
+        $output .= '<tr><th></th>';
+        foreach ($cal->getCalendarDates(Fbc\FreeBusyCalendar::DATE_FORMAT) as $label => &$dt) {
+            $output .= '<th class="date">'. $label .'</th>';
+        }
+        $output .= '</tr>';
+
+        // Iterate through each time and $output .= the availability
+        $times = $cal->getCalendarTimes(Fbc\FreeBusyCalendar::TIME_FORMAT);
+        foreach ($times as $hour => $temp) {
+            foreach ($temp as $minute => $labels) {
+                $output .= '<tr><td class="time">'. $labels[0];
+                if ($showRange) {
+                    $output .= '&nbsp;&ndash;&nbsp;' . $labels[1];
+                }
+                $output .= '</td>';
+
+                foreach ($cal->getCalendarDates(Fbc\FreeBusyCalendar::DATE_FORMAT) as $dt) {
+                    if ($cal->isFree($dt->format('Y-m-d'), $hour, $minute)) {
+                        $output .= '<td class="avail free">Free</td>';
+                    } else {
+                        $output .= '<td class="avail busy">Busy</td>';
+                    }
+                }
+            }
+            $output .= '</td>';
+        }
+        $output .= '</table>';
+
+        return $output;
+    });
 
 
 Alternatively test if a specific time/date (i.e. 5pm on 4th May 2016) is available:
 
-    $free = $fbc->isFree('2016-05-04', 17, 0);
+     $cal = $fbc->getFreeBusyCalendar();
+     $free = $cal->isFree('2016-05-04', 17, 0);
 
 
 ## Questions/Issues?

@@ -12,7 +12,8 @@ use Sabre\VObject\Reader;
 use Sabre\VObject\FreeBusyGenerator;
 
 /**
- * Container for a calendar's configuration and data.
+ * Container for a calendar's configuration and data, this class handles a specific calendar source's configuration
+ * and event data.
  *
  * @author    Martin Porcheron <martin@porcheron.uk>
  * @copyright (c) Martin Porcheron 2016.

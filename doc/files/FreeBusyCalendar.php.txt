@@ -9,7 +9,8 @@
 namespace \MPorcheron\FreeBusyCal;
 
 /**
- * Calendar of a person's availability (either one caelndar or multiple).
+ * Calendar of a person's free/busy calendar (either one calendar or multiple). This contains the details for a 
+ * person's availability.
  *
  * @author    Martin Porcheron <martin@porcheron.uk>
  * @copyright (c) Martin Porcheron 2016.

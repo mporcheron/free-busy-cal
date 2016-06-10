@@ -10,14 +10,14 @@
 namespace \MPorcheron\FreeBusyCal;
 
 /**
- * FreeBusyCal generator.
+ * FreeBusyCal generator - this is the main class used to generate a free busy calendar.
  *
  * Create a calendar configuration:
  * 
- *      $cal = new \MPorcheron\FreeBusy\UserCalendar();
- *      $cal->setUsername('ad\username');
- *      $cal->setPassword('password');
- *      $cal->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
+ *      $cal = new \MPorcheron\FreeBusy\UserCalendar()
+ *          ->setUsername('ad\username')
+ *          ->setPassword('password')
+ *          ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
  * 
  *
  * Create the Generator object and add the calendar:
@@ -38,7 +38,7 @@ namespace \MPorcheron\FreeBusyCal;
  *
  * Fetch the calendars and process them:
  * 
- *      $fbc->->fetchAndParse();
+ *      $fbc->fetchAndParse();
  * 
  *
  * Print out the calendar table, with the class `cal`, default date and time formats, the labels `Free` and `Busy` for

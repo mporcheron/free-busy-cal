@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1686942817"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-707348450"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1686942817" class="accordion-body collapse in">
+            <div id="namespace-707348450" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -165,21 +165,21 @@
                     <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
 
                     <h1><small>\</small>Generator</h1>
-                    <p><em>FreeBusyCal generator.</em></p>
+                    <p><em>FreeBusyCal generator - this is the main class used to generate a free busy calendar.</em></p>
                     <p>Create a calendar configuration:</p>
-<pre><code> $cal = new \MPorcheron\FreeBusy\UserCalendar();
- $cal-&gt;setUsername('ad\username');
- $cal-&gt;setPassword('password');
- $cal-&gt;setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');</code></pre>
+<pre><code> $cal = new \MPorcheron\FreeBusy\UserCalendar()
+     -&gt;setUsername('ad\username')
+     -&gt;setPassword('password')
+     -&gt;setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');</code></pre>
 <p>Create the Generator object and add the calendar:</p>
-<pre><code> $fbc = new Generator($cal);</code></pre>
+<pre><code> $fbc = new \MPorcheron\FreeBusyCal\Generator($cal);</code></pre>
 <p>Set the date range to extract, e.g. start from this Monday, and run for 14 days (i.e. two weeks), but exclude
 weekends:</p>
 <pre><code> $fbc-&gt;setDateRange(new \DateTime('Monday this week'), 14, false);</code></pre>
 <p>Only generate a calendar between 9am (inclusive) and 5pm (exclusive), and show a slot every 30 minutes:</p>
 <pre><code> $fbc-&gt;setTimeRange(9, 17, 30);</code></pre>
 <p>Fetch the calendars and process them:</p>
-<pre><code> $fbc-&gt;-&gt;fetchAndParse();</code></pre>
+<pre><code> $fbc-&gt;fetchAndParse();</code></pre>
 <p>Print out the calendar table, with the class <code>cal</code>, default date and time formats, the labels <code>Free</code> and <code>Busy</code> for
 slots, and show times as ranges (i.e. start – end) as opposed to just start time:</p>
 <pre><code>$contents = $fbc-&gt;generate(function (Fbc\FreeBusyCalendar &amp;$cal) {
@@ -348,12 +348,12 @@ slots, and show times as ranges (i.e. start – end) as opposed to just start ti
             <a id="property_calendars" name="property_calendars" class="anchor"></a>
             <article class="property">
                 <h3 class="private ">$calendars</h3>
-                <pre class="signature">$calendars : array&lt;mixed,\UserCalendar&gt;</pre>
+                <pre class="signature">$calendars : array&lt;mixed,\MPorcheron\FreeBusyCal\UserCalendar&gt;</pre>
                 <p><em></em></p>
                 
 
                                 <h4>Type</h4>
-                array&lt;mixed,<a href="../classes/UserCalendar.html">\UserCalendar</a>&gt;
+                array&lt;mixed,\MPorcheron\FreeBusyCal\UserCalendar&gt;
                 &mdash; Array of calendars to scrape for data.                            </article>
         </div>
         <aside class="span4 detailsbar">
@@ -396,12 +396,12 @@ slots, and show times as ranges (i.e. start – end) as opposed to just start ti
             <a id="property_freeBusyCalendar" name="property_freeBusyCalendar" class="anchor"></a>
             <article class="property">
                 <h3 class="private ">$freeBusyCalendar</h3>
-                <pre class="signature">$freeBusyCalendar : \FreeBusyCalendar</pre>
+                <pre class="signature">$freeBusyCalendar : \MPorcheron\FreeBusyCal\FreeBusyCalendar</pre>
                 <p><em></em></p>
                 
 
                                 <h4>Type</h4>
-                <a href="../classes/FreeBusyCalendar.html">\FreeBusyCalendar</a>
+                \MPorcheron\FreeBusyCal\FreeBusyCalendar
                 &mdash; Cached calendar data.                            </article>
         </div>
         <aside class="span4 detailsbar">
@@ -428,7 +428,7 @@ slots, and show times as ranges (i.e. start – end) as opposed to just start ti
             <article class="method">
                 <h3 class="public ">__construct()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__construct(\UserCalendar  <span class="argument">$cal</span>) </pre>
+                <pre class="signature" style="margin-right: 54px;">__construct(\MPorcheron\FreeBusyCal\UserCalendar  <span class="argument">$cal</span>) </pre>
                 <p><em>Construct the controller and populate it with the configuration values. Constructing this class sets the time
 limit for script execution to indefinite and the default timezone because of a PHP oddity.</em></p>
                 <p>Output buffering is started also.</p>
@@ -436,7 +436,7 @@ limit for script execution to indefinite and the default timezone because of a P
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td><a href="../classes/UserCalendar.html">\UserCalendar</a></td>
+                                <td>\MPorcheron\FreeBusyCal\UserCalendar</td>
                                 <td>$cal </td>
                                 <td><p>(One or more) calendars to extract data from.</p></td>
                             </tr>
@@ -492,14 +492,14 @@ limit for script execution to indefinite and the default timezone because of a P
             <article class="method">
                 <h3 class="public ">addCalendar()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">addCalendar(\UserCalendar  <span class="argument">$cal</span>) </pre>
+                <pre class="signature" style="margin-right: 54px;">addCalendar(\MPorcheron\FreeBusyCal\UserCalendar  <span class="argument">$cal</span>) </pre>
                 <p><em>Add a calendar to extract data from.</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td><a href="../classes/UserCalendar.html">\UserCalendar</a></td>
+                                <td>\MPorcheron\FreeBusyCal\UserCalendar</td>
                                 <td>$cal </td>
                                 <td><p>Calendar to also extact data from.</p></td>
                             </tr>
@@ -526,7 +526,7 @@ limit for script execution to indefinite and the default timezone because of a P
             <article class="method">
                 <h3 class="public ">setDateRange()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">setDateRange(\DateTime  <span class="argument">$startDate</span>,   <span class="argument">$numDays = 7</span>, boolean  <span class="argument">$includeWeekends = false</span>) : \UserCalendar</pre>
+                <pre class="signature" style="margin-right: 54px;">setDateRange(\DateTime  <span class="argument">$startDate</span>,   <span class="argument">$numDays = 7</span>, boolean  <span class="argument">$includeWeekends = false</span>) : \MPorcheron\FreeBusyCal\UserCalendar</pre>
                 <p><em>Set the date range to generate data for.</em></p>
                 
 
@@ -552,7 +552,7 @@ limit for script execution to indefinite and the default timezone because of a P
                 
                 
                                     <h4>Returns</h4>
-                    <a href="../classes/UserCalendar.html">\UserCalendar</a>
+                    \MPorcheron\FreeBusyCal\UserCalendar
                                             &mdash; <p><code>$this</code>.</p>
                                     				
                             </article>
@@ -576,7 +576,7 @@ limit for script execution to indefinite and the default timezone because of a P
             <article class="method">
                 <h3 class="public ">setTimeRange()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">setTimeRange(integer  <span class="argument">$startHour</span>, integer  <span class="argument">$endHour</span>, integer  <span class="argument">$interval = 60</span>) : \Generator</pre>
+                <pre class="signature" style="margin-right: 54px;">setTimeRange(integer  <span class="argument">$startHour</span>, integer  <span class="argument">$endHour</span>, integer  <span class="argument">$interval = 60</span>) : \MPorcheron\FreeBusyCal\Generator</pre>
                 <p><em>Set the time range to generate data for.</em></p>
                 
 
@@ -603,7 +603,7 @@ one of the following to fit evenly into the hour: 1,2,3,4,5,6,10,12,15,20,30,60.
                 
                 
                                     <h4>Returns</h4>
-                    <a href="../classes/Generator.html">\Generator</a>
+                    \MPorcheron\FreeBusyCal\Generator
                                             &mdash; <p><code>$this</code>.</p>
                                     				
                             </article>
@@ -627,7 +627,7 @@ one of the following to fit evenly into the hour: 1,2,3,4,5,6,10,12,15,20,30,60.
             <article class="method">
                 <h3 class="public ">fetchAndParse()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">fetchAndParse(boolean  <span class="argument">$refetch = false</span>) : \Generator</pre>
+                <pre class="signature" style="margin-right: 54px;">fetchAndParse(boolean  <span class="argument">$refetch = false</span>) : \MPorcheron\FreeBusyCal\Generator</pre>
                 <p><em>Fetch and parse the data needed to generate the availability calendar.</em></p>
                 
 
@@ -642,7 +642,7 @@ one of the following to fit evenly into the hour: 1,2,3,4,5,6,10,12,15,20,30,60.
                 
                 
                                     <h4>Returns</h4>
-                    <a href="../classes/Generator.html">\Generator</a>
+                    \MPorcheron\FreeBusyCal\Generator
                                             &mdash; <p><code>$this</code>.</p>
                                     				
                             </article>
@@ -664,7 +664,7 @@ one of the following to fit evenly into the hour: 1,2,3,4,5,6,10,12,15,20,30,60.
             <article class="method">
                 <h3 class="public ">generate()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">generate(\function  <span class="argument">$func</span>) : \Generator</pre>
+                <pre class="signature" style="margin-right: 54px;">generate(\function  <span class="argument">$func</span>) : \MPorcheron\FreeBusyCal\Generator</pre>
                 <p><em>Generates the calendar and returs output.</em></p>
                 
 
@@ -673,7 +673,7 @@ one of the following to fit evenly into the hour: 1,2,3,4,5,6,10,12,15,20,30,60.
                                                     <tr>
                                 <td>\function</td>
                                 <td>$func </td>
-                                <td><p>Function that takes a single paramter of a FreeBusyCalendar and returns out the output
+                                <td><p>Function that takes a single paramter of a \MPorcheron\FreeBusyCal\FreeBusyCalendar` and returns out the output
 as a string.</p></td>
                             </tr>
                                             </table>
@@ -685,7 +685,7 @@ as a string.</p></td>
                                                                     </dl>
                 
                                     <h4>Returns</h4>
-                    <a href="../classes/Generator.html">\Generator</a>
+                    \MPorcheron\FreeBusyCal\Generator
                                             &mdash; <p>Output from the print function.</p>
                                     				
                             </article>
@@ -707,7 +707,7 @@ as a string.</p></td>
             <article class="method">
                 <h3 class="public ">getFreeBusyCalendar()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getFreeBusyCalendar() : \FreeBusyCalendar</pre>
+                <pre class="signature" style="margin-right: 54px;">getFreeBusyCalendar() : \MPorcheron\FreeBusyCal\FreeBusyCalendar</pre>
                 <p><em>Retrieve the calendar of availability.</em></p>
                 
 
@@ -719,7 +719,7 @@ as a string.</p></td>
                                                                     </dl>
                 
                                     <h4>Returns</h4>
-                    <a href="../classes/FreeBusyCalendar.html">\FreeBusyCalendar</a>
+                    \MPorcheron\FreeBusyCal\FreeBusyCalendar
                                             &mdash; <p>Calendar availability.</p>
                                     				
                             </article>
@@ -784,7 +784,7 @@ as a string.</p></td>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on June 9th, 2016 at 13:54.
+                    on June 10th, 2016 at 10:23.
                 </section>
             </section>
         </section>

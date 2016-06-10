@@ -10,19 +10,19 @@
 namespace \MPorcheron\FreeBusyCal;
 
 /**
- * FreeBusyCal generator.
+ * FreeBusyCal generator - this is the main class used to generate a free busy calendar.
  *
  * Create a calendar configuration:
  * 
- *      $cal = new \MPorcheron\FreeBusy\UserCalendar();
- *      $cal->setUsername('ad\username');
- *      $cal->setPassword('password');
- *      $cal->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
+ *      $cal = new \MPorcheron\FreeBusy\UserCalendar()
+ *          ->setUsername('ad\username')
+ *          ->setPassword('password')
+ *          ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
  * 
  *
  * Create the Generator object and add the calendar:
  * 
- *      $fbc = new Generator($cal);
+ *      $fbc = new \MPorcheron\FreeBusyCal\Generator($cal);
  * 
  *
  * Set the date range to extract, e.g. start from this Monday, and run for 14 days (i.e. two weeks), but exclude
@@ -38,7 +38,7 @@ namespace \MPorcheron\FreeBusyCal;
  *
  * Fetch the calendars and process them:
  * 
- *      $fbc->->fetchAndParse();
+ *      $fbc->fetchAndParse();
  * 
  *
  * Print out the calendar table, with the class `cal`, default date and time formats, the labels `Free` and `Busy` for
@@ -102,7 +102,7 @@ class Generator
 {
     
     /**
-     * @var UserCalendar[] Array of calendars to scrape for data.
+     * @var \MPorcheron\FreeBusyCal\UserCalendar[] Array of calendars to scrape for data.
      */
     private $calendars;
 
@@ -112,7 +112,7 @@ class Generator
     private $config;
 
     /**
-     * @var FreeBusyCalendar Cached calendar data.
+     * @var \MPorcheron\FreeBusyCal\FreeBusyCalendar Cached calendar data.
      */
     private $freeBusyCalendar = null;
 
@@ -122,7 +122,7 @@ class Generator
      *
      * Output buffering is started also.
      *
-     * @param UserCalendar $cal
+     * @param \MPorcheron\FreeBusyCal\UserCalendar $cal
      *  (One or more) calendars to extract data from.
      */
     public function __construct(&$cal)
@@ -156,7 +156,7 @@ class Generator
     /**
      * Add a calendar to extract data from.
      *
-     * @param UserCalendar $cal
+     * @param \MPorcheron\FreeBusyCal\UserCalendar $cal
      *  Calendar to also extact data from.
      */
     public function addCalendar(Calendar &$cal)
@@ -175,7 +175,7 @@ class Generator
      * @param  boolean   $includeWeekends
      *  Set to false to ignore weekends. Note weekennds still count in the number of days (i.e. 7 days, and
      *  `$includeWeekends` starting on a Monday, will show Mon - Fri.)
-     * @return UserCalendar
+     * @return \MPorcheron\FreeBusyCal\UserCalendar
      *  `$this`.
      */
     public function setDateRange(\DateTime &$startDate, $numDays = 7, $includeWeekends = false)
@@ -207,7 +207,7 @@ class Generator
      *  How many mniutes to break each slot in the calendar up by (60 = segment by hour). You should make this number
      *  one of the following to fit evenly into the hour: 1,2,3,4,5,6,10,12,15,20,30,60. Minumum is `1`, maximum is
      *  `60`, default is `60`.
-     * @return Generator
+     * @return \MPorcheron\FreeBusyCal\Generator
      *  `$this`.
      */
     public function setTimeRange($startHour, $endHour, $interval = 60)
@@ -241,7 +241,7 @@ class Generator
      *
      * @param  boolean $refetch
      *  Refetch iCal data if it has already been fetched once.
-     * @return Generator
+     * @return \MPorcheron\FreeBusyCal\Generator
      *  `$this`.
      */
     public function fetchAndParse($refetch = false)
@@ -268,9 +268,9 @@ class Generator
      * Generates the calendar and returs output.
      *
      * @param  function $func
-     *  Function that takes a single paramter of a FreeBusyCalendar and returns out the output 
+     *  Function that takes a single paramter of a \MPorcheron\FreeBusyCal\FreeBusyCalendar` and returns out the output 
      *  as a string.
-     * @return Generator
+     * @return \MPorcheron\FreeBusyCal\Generator
      *  Output from the print function.
      * @throws \BadFunctionCallException
      *  If the calendar hasn't been fetched yet.
@@ -287,7 +287,7 @@ class Generator
     /**
      * Retrieve the calendar of availability.
      *
-     * @return FreeBusyCalendar
+     * @return \MPorcheron\FreeBusyCal\FreeBusyCalendar
      *  Calendar availability.
      * @throws \BadFunctionCallException
      *  If the calendar hasn't been fetched yet.
