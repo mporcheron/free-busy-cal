@@ -6,7 +6,7 @@ An example usage can be found in `example.php`. This file connects to a CalDAV s
 
 Create a calendar configuration:
 
-    $cal = (new MPorcheron\FreeBusy\Calendar())
+    $cal = (new MPorcheron\FreeBusyCal\UserCalendar())
       ->setUsername('ad\username')
       ->setPassword('password')
       ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');

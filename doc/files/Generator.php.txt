@@ -14,7 +14,7 @@ namespace \MPorcheron\FreeBusyCal;
  *
  * Create a calendar configuration:
  * 
- *      $cal = new \MPorcheron\FreeBusy\UserCalendar()
+ *      $cal = new \MPorcheron\FreeBusyCal\UserCalendar()
  *          ->setUsername('ad\username')
  *          ->setPassword('password')
  *          ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
