@@ -236,9 +236,7 @@ class Generic_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Snif
                 && $tokens[$checkToken]['code'] === T_CLOSE_PARENTHESIS
                 && isset($tokens[$checkToken]['parenthesis_opener']) === true)
                 || ($tokens[$i]['code'] === T_CLOSE_PARENTHESIS
-                && isset($tokens[$i]['parenthesis_opener']) === true
-                && isset($tokens[$i]['parenthesis_owner']) === true
-                && $tokens[$tokens[$i]['parenthesis_owner']]['code'] === T_ARRAY)
+                && isset($tokens[$i]['parenthesis_opener']) === true)
             ) {
                 if ($checkToken !== null) {
                     $parenCloser = $checkToken;
@@ -253,87 +251,165 @@ class Generic_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Snif
 
                 $parenOpener = $tokens[$parenCloser]['parenthesis_opener'];
                 if ($tokens[$parenCloser]['line'] !== $tokens[$parenOpener]['line']) {
-                    $first       = $phpcsFile->findFirstOnLine(T_WHITESPACE, $parenOpener, true);
-                    $checkIndent = ($tokens[$first]['column'] - 1);
-                    if (isset($adjustments[$first]) === true) {
-                        $checkIndent += $adjustments[$first];
+                    $parens = 0;
+                    if (isset($tokens[$parenCloser]['nested_parenthesis']) === true
+                        && empty($tokens[$parenCloser]['nested_parenthesis']) === false
+                    ) {
+                        end($tokens[$parenCloser]['nested_parenthesis']);
+                        $parens = key($tokens[$parenCloser]['nested_parenthesis']);
+                        if ($this->_debug === true) {
+                            $line = $tokens[$parens]['line'];
+                            echo "\t* token has nested parenthesis $parens on line $line *".PHP_EOL;
+                        }
+                    }
+
+                    $condition = 0;
+                    if (isset($tokens[$parenCloser]['conditions']) === true
+                        && empty($tokens[$parenCloser]['conditions']) === false
+                    ) {
+                        end($tokens[$parenCloser]['conditions']);
+                        $condition = key($tokens[$parenCloser]['conditions']);
+                        if ($this->_debug === true) {
+                            $line = $tokens[$condition]['line'];
+                            $type = $tokens[$condition]['type'];
+                            echo "\t* token is inside condition $condition ($type) on line $line *".PHP_EOL;
+                        }
+                    }
+
+                    if ($parens > $condition) {
+                        if ($this->_debug === true) {
+                            echo "\t* using parenthesis *".PHP_EOL;
+                        }
+
+                        $parenOpener = $parens;
+                        $condition   = 0;
+                    } else if ($condition > 0) {
+                        if ($this->_debug === true) {
+                            echo "\t* using condition *".PHP_EOL;
+                        }
+
+                        $parenOpener = $condition;
+                        $parens      = 0;
                     }
 
                     $exact = false;
 
-                    if ($this->_debug === true) {
-                        $line = $tokens[$first]['line'];
-                        $type = $tokens[$first]['type'];
-                        echo "\t* first token on line $line is $first ($type) *".PHP_EOL;
-                    }
+                    $lastOpenTagConditions = array_keys($tokens[$lastOpenTag]['conditions']);
+                    $lastOpenTagCondition  = array_pop($lastOpenTagConditions);
 
-                    if ($first === $tokens[$parenCloser]['parenthesis_opener']) {
-                        // This is unlikely to be the start of the statement, so look
-                        // back further to find it.
-                        $first--;
-                    }
-
-                    $prev = $phpcsFile->findStartOfStatement($first);
-                    if ($prev !== $first) {
-                        // This is not the start of the statement.
+                    if ($condition > 0 && $lastOpenTagCondition === $condition) {
                         if ($this->_debug === true) {
-                            $line = $tokens[$prev]['line'];
-                            $type = $tokens[$prev]['type'];
-                            echo "\t* previous is $type on line $line *".PHP_EOL;
+                            echo "\t* open tag is inside condition; using open tag *".PHP_EOL;
                         }
 
-                        $first = $phpcsFile->findFirstOnLine(T_WHITESPACE, $prev, true);
-                        $prev  = $phpcsFile->findStartOfStatement($first);
-                        $first = $phpcsFile->findFirstOnLine(T_WHITESPACE, $prev, true);
+                        $checkIndent = ($tokens[$lastOpenTag]['column'] - 1);
+                        if (isset($adjustments[$condition]) === true) {
+                            $checkIndent += $adjustments[$condition];
+                        }
+
+                        $currentIndent = $checkIndent;
+
+                        if ($this->_debug === true) {
+                            $type = $tokens[$lastOpenTag]['type'];
+                            echo "\t=> checking indent of $checkIndent; main indent set to $currentIndent by token $lastOpenTag ($type)".PHP_EOL;
+                        }
+                    } else if ($condition > 0
+                        && isset($tokens[$condition]['scope_opener']) === true
+                        && isset($setIndents[$tokens[$condition]['scope_opener']]) === true
+                    ) {
+                        $checkIndent = $setIndents[$tokens[$condition]['scope_opener']];
+                        if (isset($adjustments[$condition]) === true) {
+                            $checkIndent += $adjustments[$condition];
+                        }
+
+                        $currentIndent = $checkIndent;
+
+                        if ($this->_debug === true) {
+                            $type = $tokens[$condition]['type'];
+                            echo "\t=> checking indent of $checkIndent; main indent set to $currentIndent by token $condition ($type)".PHP_EOL;
+                        }
+                    } else {
+                        $first = $phpcsFile->findFirstOnLine(T_WHITESPACE, $parenOpener, true);
+
+                        $checkIndent = ($tokens[$first]['column'] - 1);
+                        if (isset($adjustments[$first]) === true) {
+                            $checkIndent += $adjustments[$first];
+                        }
+
                         if ($this->_debug === true) {
                             $line = $tokens[$first]['line'];
                             $type = $tokens[$first]['type'];
-                            echo "\t* amended first token is $first ($type) on line $line *".PHP_EOL;
-                        }
-                    }
-
-                    if (isset($tokens[$first]['scope_closer']) === true
-                        && $tokens[$first]['scope_closer'] === $first
-                    ) {
-                        if ($this->_debug === true) {
-                            echo "\t* first token is a scope closer *".PHP_EOL;
+                            echo "\t* first token on line $line is $first ($type) *".PHP_EOL;
                         }
 
-                        if (isset($tokens[$first]['scope_condition']) === true) {
-                            $scopeCloser = $first;
-                            $first       = $phpcsFile->findFirstOnLine(T_WHITESPACE, $tokens[$scopeCloser]['scope_condition'], true);
+                        if ($first === $tokens[$parenCloser]['parenthesis_opener']) {
+                            // This is unlikely to be the start of the statement, so look
+                            // back further to find it.
+                            $first--;
+                        }
 
+                        $prev = $phpcsFile->findStartOfStatement($first, T_COMMA);
+                        if ($prev !== $first) {
+                            // This is not the start of the statement.
+                            if ($this->_debug === true) {
+                                $line = $tokens[$prev]['line'];
+                                $type = $tokens[$prev]['type'];
+                                echo "\t* previous is $type on line $line *".PHP_EOL;
+                            }
+
+                            $first = $phpcsFile->findFirstOnLine(T_WHITESPACE, $prev, true);
+                            $prev  = $phpcsFile->findStartOfStatement($first, T_COMMA);
+                            $first = $phpcsFile->findFirstOnLine(T_WHITESPACE, $prev, true);
+                            if ($this->_debug === true) {
+                                $line = $tokens[$first]['line'];
+                                $type = $tokens[$first]['type'];
+                                echo "\t* amended first token is $first ($type) on line $line *".PHP_EOL;
+                            }
+                        }
+
+                        if (isset($tokens[$first]['scope_closer']) === true
+                            && $tokens[$first]['scope_closer'] === $first
+                        ) {
+                            if ($this->_debug === true) {
+                                echo "\t* first token is a scope closer *".PHP_EOL;
+                            }
+
+                            if (isset($tokens[$first]['scope_condition']) === true) {
+                                $scopeCloser = $first;
+                                $first       = $phpcsFile->findFirstOnLine(T_WHITESPACE, $tokens[$scopeCloser]['scope_condition'], true);
+
+                                $currentIndent = ($tokens[$first]['column'] - 1);
+                                if (isset($adjustments[$first]) === true) {
+                                    $currentIndent += $adjustments[$first];
+                                }
+
+                                // Make sure it is divisible by our expected indent.
+                                if ($tokens[$tokens[$scopeCloser]['scope_condition']]['code'] !== T_CLOSURE) {
+                                    $currentIndent = (int) (ceil($currentIndent / $this->indent) * $this->indent);
+                                }
+
+                                $setIndents[$first] = $currentIndent;
+
+                                if ($this->_debug === true) {
+                                    $type = $tokens[$first]['type'];
+                                    echo "\t=> indent set to $currentIndent by token $first ($type)".PHP_EOL;
+                                }
+                            }//end if
+                        } else {
+                            // Don't force current indent to divisible because there could be custom
+                            // rules in place between parenthesis, such as with arrays.
                             $currentIndent = ($tokens[$first]['column'] - 1);
                             if (isset($adjustments[$first]) === true) {
                                 $currentIndent += $adjustments[$first];
-                            }
-
-                            // Make sure it is divisible by our expected indent.
-                            if ($tokens[$tokens[$scopeCloser]['scope_condition']]['code'] !== T_CLOSURE) {
-                                $currentIndent = (int) (ceil($currentIndent / $this->indent) * $this->indent);
                             }
 
                             $setIndents[$first] = $currentIndent;
 
                             if ($this->_debug === true) {
                                 $type = $tokens[$first]['type'];
-                                echo "\t=> indent set to $currentIndent by token $first ($type)".PHP_EOL;
+                                echo "\t=> checking indent of $checkIndent; main indent set to $currentIndent by token $first ($type)".PHP_EOL;
                             }
                         }//end if
-                    } else {
-                        // Don't force current indent to divisible because there could be custom
-                        // rules in place between parenthesis, such as with arrays.
-                        $currentIndent = ($tokens[$first]['column'] - 1);
-                        if (isset($adjustments[$first]) === true) {
-                            $currentIndent += $adjustments[$first];
-                        }
-
-                        $setIndents[$first] = $currentIndent;
-
-                        if ($this->_debug === true) {
-                            $type = $tokens[$first]['type'];
-                            echo "\t=> checking indent of $checkIndent; main indent set to $currentIndent by token $first ($type)".PHP_EOL;
-                        }
                     }//end if
                 } else if ($this->_debug === true) {
                     echo "\t * ignoring single-line definition *".PHP_EOL;
@@ -379,7 +455,7 @@ class Generic_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Snif
                         $first--;
                     }
 
-                    $prev = $phpcsFile->findStartOfStatement($first);
+                    $prev = $phpcsFile->findStartOfStatement($first, T_COMMA);
                     if ($prev !== $first) {
                         // This is not the start of the statement.
                         if ($this->_debug === true) {
@@ -389,13 +465,15 @@ class Generic_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Snif
                         }
 
                         $first = $phpcsFile->findFirstOnLine(T_WHITESPACE, $prev, true);
-                        $prev  = $phpcsFile->findStartOfStatement($first);
+                        $prev  = $phpcsFile->findStartOfStatement($first, T_COMMA);
                         $first = $phpcsFile->findFirstOnLine(T_WHITESPACE, $prev, true);
                         if ($this->_debug === true) {
                             $line = $tokens[$first]['line'];
                             $type = $tokens[$first]['type'];
                             echo "\t* amended first token is $first ($type) on line $line *".PHP_EOL;
                         }
+                    } else if ($tokens[$first]['code'] === T_WHITESPACE) {
+                        $first = $phpcsFile->findNext(T_WHITESPACE, ($first + 1), null, true);
                     }
 
                     if (isset($tokens[$first]['scope_closer']) === true
@@ -730,10 +808,26 @@ class Generic_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Snif
                 $checkIndent = (int) (ceil($checkIndent / $this->indent) * $this->indent);
             }
 
-            // Check the line indent.
+            // Special case for ELSE statements that are not on the same
+            // line as the previous IF statements closing brace. They still need
+            // to have the same indent or it will break code after the block.
+            if ($checkToken !== null && $tokens[$checkToken]['code'] === T_ELSE) {
+                $exact = true;
+            }
+
             if ($checkIndent === null) {
                 $checkIndent = $currentIndent;
             }
+
+            /*
+                The indent of the line is checked by the following IF block.
+
+                Up until now, we've just been figuring out what the indent
+                of this line should be.
+
+                After this IF block, we adjust the indent again for
+                the checking of future line.
+            */
 
             $adjusted = false;
             if ($checkToken !== null
@@ -903,13 +997,14 @@ class Generic_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Snif
                 continue;
             }//end if
 
-            // Closures set the indent based on their own indent level.
-            if ($tokens[$i]['code'] === T_CLOSURE) {
+            // Anon classes and functions set the indent based on their own indent level.
+            if ($tokens[$i]['code'] === T_CLOSURE || $tokens[$i]['code'] === T_ANON_CLASS) {
                 $closer = $tokens[$i]['scope_closer'];
                 if ($tokens[$i]['line'] === $tokens[$closer]['line']) {
                     if ($this->_debug === true) {
+                        $type = str_replace('_', ' ', strtolower(substr($tokens[$i]['type'], 2)));
                         $line = $tokens[$i]['line'];
-                        echo "* ignoring single-line closure on line $line".PHP_EOL;
+                        echo "* ignoring single-line $type on line $line".PHP_EOL;
                     }
 
                     $i = $closer;
@@ -917,8 +1012,9 @@ class Generic_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Snif
                 }
 
                 if ($this->_debug === true) {
+                    $type = str_replace('_', ' ', strtolower(substr($tokens[$i]['type'], 2)));
                     $line = $tokens[$i]['line'];
-                    echo "Open closure on line $line".PHP_EOL;
+                    echo "Open $type on line $line".PHP_EOL;
                 }
 
                 $first         = $phpcsFile->findFirstOnLine(T_WHITESPACE, $i, true);
@@ -929,13 +1025,13 @@ class Generic_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Snif
                 }
 
                 // Make sure it is divisible by our expected indent.
-                $currentIndent      = (int) (floor($currentIndent / $this->indent) * $this->indent);
-                $setIndents[$first] = $currentIndent;
+                $currentIndent = (int) (floor($currentIndent / $this->indent) * $this->indent);
                 $i = $tokens[$i]['scope_opener'];
+                $setIndents[$i] = $currentIndent;
 
                 if ($this->_debug === true) {
-                    $type = $tokens[$first]['type'];
-                    echo "\t=> indent set to $currentIndent by token $first ($type)".PHP_EOL;
+                    $type = $tokens[$i]['type'];
+                    echo "\t=> indent set to $currentIndent by token $i ($type)".PHP_EOL;
                 }
 
                 continue;
@@ -1019,14 +1115,16 @@ class Generic_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Snif
                 continue;
             }//end if
 
-            // Closing a closure.
+            // Closing an anon class or function.
             if (isset($tokens[$i]['scope_condition']) === true
                 && $tokens[$i]['scope_closer'] === $i
-                && $tokens[$tokens[$i]['scope_condition']]['code'] === T_CLOSURE
+                && ($tokens[$tokens[$i]['scope_condition']]['code'] === T_CLOSURE
+                || $tokens[$tokens[$i]['scope_condition']]['code'] === T_ANON_CLASS)
             ) {
                 if ($this->_debug === true) {
+                    $type = str_replace('_', ' ', strtolower(substr($tokens[$tokens[$i]['scope_condition']]['type'], 2)));
                     $line = $tokens[$i]['line'];
-                    echo "Close closure on line $line".PHP_EOL;
+                    echo "Close $type on line $line".PHP_EOL;
                 }
 
                 $prev = false;
@@ -1152,7 +1250,7 @@ class Generic_Sniffs_WhiteSpace_ScopeIndentSniff implements PHP_CodeSniffer_Snif
                     }
 
                     if ($condition === 0 || $tokens[$condition]['scope_opener'] < $first) {
-                        $currentIndent -= $this->indent;
+                        $currentIndent = $setIndents[$first];
                     } else if ($this->_debug === true) {
                         echo "\t* ignoring scope closer *".PHP_EOL;
                     }

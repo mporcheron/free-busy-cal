@@ -2,10 +2,10 @@
 
 namespace Sabre\VObject\Property;
 
-use Sabre\VObject\Property;
 use Sabre\VObject\Component;
-use Sabre\VObject\Parser\MimeDir;
 use Sabre\VObject\Document;
+use Sabre\VObject\Parser\MimeDir;
+use Sabre\VObject\Property;
 use Sabre\Xml;
 
 /**
@@ -397,7 +397,7 @@ class Text extends Property {
             if (count($parts) < $minimum) {
                 $warnings[] = [
                     'level'   => $options & self::REPAIR ? 1 : 3,
-                    'message' => 'The ' . $this->name  . ' property must have at least ' . $minimum . ' values. It only has ' . count($parts),
+                    'message' => 'The ' . $this->name . ' property must have at least ' . $minimum . ' values. It only has ' . count($parts),
                     'node'    => $this,
                 ];
                 if ($options & self::REPAIR) {

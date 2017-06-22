@@ -30,6 +30,13 @@
 class Squiz_Sniffs_WhiteSpace_ObjectOperatorSpacingSniff implements PHP_CodeSniffer_Sniff
 {
 
+    /**
+     * Allow newlines instead of spaces.
+     *
+     * @var boolean
+     */
+    public $ignoreNewlines = false;
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -78,23 +85,70 @@ class Squiz_Sniffs_WhiteSpace_ObjectOperatorSpacingSniff implements PHP_CodeSnif
         $phpcsFile->recordMetric($stackPtr, 'Spacing before object operator', $before);
         $phpcsFile->recordMetric($stackPtr, 'Spacing after object operator', $after);
 
-        if ($before !== 0) {
+        $this->checkSpacingBeforeOperator($phpcsFile, $stackPtr, $before);
+        $this->checkSpacingAfterOperator($phpcsFile, $stackPtr, $after);
+
+    }//end process()
+
+
+    /**
+     * Check the spacing before the operator.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token
+     *                                        in the stack passed in $tokens.
+     * @param mixed                $before    The number of spaces found before the
+     *                                        operator or the string 'newline'.
+     *
+     * @return boolean true if there was no error, false otherwise.
+     */
+    protected function checkSpacingBeforeOperator(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $before)
+    {
+        if ($before !== 0
+            && ($before !== 'newline' || $this->ignoreNewlines === false)
+        ) {
             $error = 'Space found before object operator';
             $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'Before');
             if ($fix === true) {
                 $phpcsFile->fixer->replaceToken(($stackPtr - 1), '');
             }
+
+            return false;
         }
 
-        if ($after !== 0) {
+        return true;
+
+    }//end checkSpacingBeforeOperator()
+
+
+    /**
+     * Check the spacing after the operator.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token
+     *                                        in the stack passed in $tokens.
+     * @param mixed                $after     The number of spaces found after the
+     *                                        operator or the string 'newline'.
+     *
+     * @return boolean true if there was no error, false otherwise.
+     */
+    protected function checkSpacingAfterOperator(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $after)
+    {
+        if ($after !== 0
+            && ($after !== 'newline' || $this->ignoreNewlines === false)
+        ) {
             $error = 'Space found after object operator';
             $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'After');
             if ($fix === true) {
                 $phpcsFile->fixer->replaceToken(($stackPtr + 1), '');
             }
+
+            return false;
         }
 
-    }//end process()
+        return true;
+
+    }//end checkSpacingAfterOperator()
 
 
 }//end class

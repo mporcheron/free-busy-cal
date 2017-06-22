@@ -198,13 +198,14 @@ class Squiz_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff implements 
                 }
             }
 
-            // Take references into account when expecting the
-            // location of whitespace.
             $checkToken = ($nextParam - 1);
-            if ($tokens[$checkToken]['code'] === T_ELLIPSIS) {
-                $checkToken--;
+            $prev       = $phpcsFile->findPrevious(T_WHITESPACE, $checkToken, null, true);
+            if ($tokens[$prev]['code'] === T_ELLIPSIS) {
+                $checkToken = ($prev - 1);
             }
 
+            // Take references into account when expecting the
+            // location of whitespace.
             if ($phpcsFile->isReference($checkToken) === true) {
                 $whitespace = ($checkToken - 1);
             } else {
@@ -311,7 +312,7 @@ class Squiz_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff implements 
                     $nextToken++;
                 }
 
-                if ($nextToken !== $nextParam) {
+                if ($tokens[$nextToken]['code'] !== T_ELLIPSIS && $nextToken !== $nextParam) {
                     // There was a type hint, so check the spacing between
                     // the hint and the variable as well.
                     $hint = $tokens[$nextToken]['content'];
