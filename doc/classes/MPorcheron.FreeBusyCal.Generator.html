@@ -144,28 +144,28 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-184801302"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2096002900"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-184801302" class="accordion-body collapse in">
+            <div id="namespace-2096002900" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-839558522"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-493106864"></a>
                                 <a href="../namespaces/MPorcheron.html" style="margin-left: 30px; padding-left: 0">MPorcheron</a>
             </div>
-            <div id="namespace-839558522" class="accordion-body collapse ">
+            <div id="namespace-493106864" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1366856878"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-988495625"></a>
                                 <a href="../namespaces/MPorcheron.FreeBusyCal.html" style="margin-left: 30px; padding-left: 0">FreeBusyCal</a>
             </div>
-            <div id="namespace-1366856878" class="accordion-body collapse ">
+            <div id="namespace-988495625" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -215,14 +215,12 @@
 <ul>
 <li>if the file is accessed over the internet, use the `setUrl(url)` function instead of `setFile(file)`.</li>
 <li>if you have the calendar source inside a string, use the function `setiCal(source)`</li>
-<li>If your calendar is retrieved from a CalDAV server, use the `CalDAVCalendar` class:
-
-     $cal = (new MPorcheron\FreeBusyCal\CalDAVCalendar())
-         ->setUsername('my.apple.id@me.com')
-         ->setPassword('application-specific-password')
-         ->setPrincipalUrl('https://caldav.icloud.com/123456789876543/principal/');
-
-</li></ul>
+<li>If your calendar is retrieved from a CalDAV server, use the `CalDAVCalendar` class:</li>
+</ul>
+<pre><code> $iCloud = (new MPorcheron\FreeBusyCal\CalDAVCalendar())
+     -&gt;setUsername('my.apple.id@me.com')
+     -&gt;setPassword('application-specific-password')
+     -&gt;setPrincipalUrl('https://caldav.icloud.com/123456789876543/principal/');</code></pre>
 <p>Create the <code>Generator</code> object and add one or more calendars:</p>
 <pre><code>$fbc = new \MPorcheron\FreeBusyCal\Generator($cal, $iCloud);</code></pre>
 <p>Set the date range to extract, e.g. start from this Monday, and run for 14 days (i.e. two weeks), but exclude
@@ -837,7 +835,7 @@ as a string.</p></td>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on June 22nd, 2017 at 23:59.
+                    on June 23rd, 2017 at 00:03.
                 </section>
             </section>
         </section>

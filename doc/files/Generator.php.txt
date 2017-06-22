@@ -20,14 +20,13 @@ namespace MPorcheron\FreeBusyCal;
  * <ul>
  * <li>if the file is accessed over the internet, use the `setUrl(url)` function instead of `setFile(file)`.</li>
  * <li>if you have the calendar source inside a string, use the function `setiCal(source)`</li>
- * <li>If your calendar is retrieved from a CalDAV server, use the `CalDAVCalendar` class:
+ * <li>If your calendar is retrieved from a CalDAV server, use the `CalDAVCalendar` class:</li>
+ * </ul>
  *
- *      $cal = (new MPorcheron\FreeBusyCal\CalDAVCalendar())
+ *      $iCloud = (new MPorcheron\FreeBusyCal\CalDAVCalendar())
  *          ->setUsername('my.apple.id@me.com')
  *          ->setPassword('application-specific-password')
  *          ->setPrincipalUrl('https://caldav.icloud.com/123456789876543/principal/');
- *
- * </li></ul>
  *
  * Create the `Generator` object and add one or more calendars:
  *
