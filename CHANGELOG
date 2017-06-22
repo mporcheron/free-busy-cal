@@ -1,11 +1,10 @@
-
 v0.4
 ----
 - Rewrite CalDAV functionality with Sabre\DAV client (now fully using composer)
 - Rename 'UserCalendar' back to 'Calendar'
 - Move CalDAV functionality to subclass of 'Calendar', 'CalDAVCalendar'
 - Pass configuration to the fetch() function of 'Calendar' class
-- Fix: Merged calendars would overrwrite each other
+- Fix: Merged calendars would overwrite each other
 - Fix: Generating output with multiple calendars
 - Fix: Added missing changelog
 
@@ -26,10 +25,10 @@ v0.3
 
 v0.2
 ----
-- Update dependancies
+- Update dependencies
 - Add composer support properly
 - Begin modularisation of the code
-- Added example walthrough
+- Added example walkthrough
 - Clearer commenting and documentation
 
 v0.1
