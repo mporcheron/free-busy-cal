@@ -4,18 +4,25 @@
 An example usage can be found in `example.php`. This file connects to a CalDAV server, extracts two weeks of dates 
 (excluding weekends) and generates an HTML table. A sample walkthough of the code is below:
 
-Create a calendar configuration:
+If you are loading an iCal file, use the `Calendar` class:
 
-    $cal = (new MPorcheron\FreeBusyCal\UserCalendar())
-      ->setUsername('ad\username')
-      ->setPassword('password')
-      ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
+    $cal = (new MPorcheron\FreeBusyCal\Calendar())->setFile('calendar.ics');
 
+Alternatively:
 
-Create the Generator object and add the calendar:
+ * if the file is accessed over the internet, use the `setUrl(url)` function instead of `setFile(file)`. 
+ * if you have the calendar source inside a string, use the function `setiCal(source)`
 
-	$fbc = new \MPorcheron\FreeBusyCal\Generator($cal);
+If your calendar is retrieved from a CalDAV server, use the `CalDAVCalendar` class:
 
+    $cal = (new MPorcheron\FreeBusyCal\CalDAVCalendar())
+        ->setUsername('my.apple.id@me.com')
+        ->setPassword('application-specific-password')
+        ->setPrincipalUrl('https://caldav.icloud.com/123456789876543/principal/');
+
+Create the `Generator` object and add one or more calendars:
+
+	$fbc = new \MPorcheron\FreeBusyCal\Generator($cal, $iCloud);
 
 Set the date range to extract, e.g. start from this Monday, and run for 14 days (i.e. two weeks), but exclude
 weekends:
@@ -85,6 +92,9 @@ Alternatively test if a specific time/date (i.e. 5pm on 4th May 2016) is availab
      $cal = $fbc->getFreeBusyCalendar();
      $free = $cal->isFree('2016-05-04', 17, 0);
 
+
+## Testing
+This has been tested with the ICS file from Office 365 and iCloud CalDAV.
 
 ## Questions/Issues?
 Please submit a [GitHub issue](https://github.com/mporcheron/FreeBusyCal)

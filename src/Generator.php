@@ -12,38 +12,46 @@ namespace MPorcheron\FreeBusyCal;
 /**
  * FreeBusyCal generator - this is the main class used to generate a free busy calendar.
  *
- * Create a calendar configuration:
- * 
- *      $cal = new \MPorcheron\FreeBusyCal\UserCalendar()
- *          ->setUsername('ad\username')
- *          ->setPassword('password')
- *          ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
- * 
+ * If you are loading an iCal file, use the `Calendar` class:
  *
- * Create the Generator object and add the calendar:
- * 
- *      $fbc = new \MPorcheron\FreeBusyCal\Generator($cal);
- * 
+ *      $cal = (new MPorcheron\FreeBusyCal\Calendar())->setFile('calendar.ics');
+ *
+ * Alternatively:
+ * <ul>
+ * <li>if the file is accessed over the internet, use the `setUrl(url)` function instead of `setFile(file)`.</li>
+ * <li>if you have the calendar source inside a string, use the function `setiCal(source)`</li>
+ * <li>If your calendar is retrieved from a CalDAV server, use the `CalDAVCalendar` class:
+ *
+ *      $cal = (new MPorcheron\FreeBusyCal\CalDAVCalendar())
+ *          ->setUsername('my.apple.id@me.com')
+ *          ->setPassword('application-specific-password')
+ *          ->setPrincipalUrl('https://caldav.icloud.com/123456789876543/principal/');
+ *
+ * </li></ul>
+ *
+ * Create the `Generator` object and add one or more calendars:
+ *
+ *     $fbc = new \MPorcheron\FreeBusyCal\Generator($cal, $iCloud);
  *
  * Set the date range to extract, e.g. start from this Monday, and run for 14 days (i.e. two weeks), but exclude
  * weekends:
- * 
+ *
  *      $fbc->setDateRange(new \DateTime('Monday this week'), 14, false);
- * 
+ *
  *
  * Only generate a calendar between 9am (inclusive) and 5pm (exclusive), and show a slot every 30 minutes:
- * 
+ *
  *      $fbc->setTimeRange(9, 17, 30);
- * 
+ *
  *
  * Fetch the calendars and process them:
- * 
+ *
  *      $fbc->fetchAndParse();
- * 
+ *
  *
  * Print out the calendar table, with the class `cal`, default date and time formats, the labels `Free` and `Busy` for
  *  slots, and show times as ranges (i.e. start – end) as opposed to just start time:
- * 
+ *
  *     $contents = $fbc->generate(function (Fbc\FreeBusyCalendar &$cal) {
  *         $output = '<table class="cal">';
  *
@@ -88,13 +96,13 @@ namespace MPorcheron\FreeBusyCal;
  *     });
  *
  * Alternatively test if a specific time/date (i.e. 5pm on 4th May 2016) is available:
- * 
+ *
  *      $cal = $fbc->getFreeBusyCalendar();
  *      $free = $cal->isFree('2016-05-04', 17, 0);
- * 
  *
- * @author    Martin Porcheron <martin@porcheron.uk>
- * @copyright (c) Martin Porcheron 2016.
+ *
+ * @author    Martin Porcheron <martin-fbc@porcheron.uk>
+ * @copyright (c) Martin Porcheron 2017.
  * @license   MIT Licence
  */
 
@@ -102,7 +110,7 @@ class Generator
 {
     
     /**
-     * @var \MPorcheron\FreeBusyCal\UserCalendar[] Array of calendars to scrape for data.
+     * @var \MPorcheron\FreeBusyCal\Calendar[] Array of calendars to scrape for data.
      */
     private $calendars;
 
@@ -122,7 +130,7 @@ class Generator
      *
      * Output buffering is started also.
      *
-     * @param \MPorcheron\FreeBusyCal\UserCalendar $cal
+     * @param \MPorcheron\FreeBusyCal\Calendar $cal
      *  (One or more) calendars to extract data from.
      */
     public function __construct(&$cal)
@@ -156,7 +164,7 @@ class Generator
     /**
      * Add a calendar to extract data from.
      *
-     * @param \MPorcheron\FreeBusyCal\UserCalendar $cal
+     * @param \MPorcheron\FreeBusyCal\Calendar $cal
      *  Calendar to also extact data from.
      */
     public function addCalendar(Calendar &$cal)
@@ -170,12 +178,12 @@ class Generator
      * @see    http://php.net/manual/en/datetime.construct.php
      * @param  \DateTime $startDate
      *  When to start the calendar from.
-     * @param  int       $length
+     * @param  int       $numDays
      *  Number of days from the start date to generate calendar for.
      * @param  boolean   $includeWeekends
      *  Set to false to ignore weekends. Note weekennds still count in the number of days (i.e. 7 days, and
      *  `$includeWeekends` starting on a Monday, will show Mon - Fri.)
-     * @return \MPorcheron\FreeBusyCal\UserCalendar
+     * @return \MPorcheron\FreeBusyCal\Calendar
      *  `$this`.
      */
     public function setDateRange(\DateTime &$startDate, $numDays = 7, $includeWeekends = false)
@@ -253,9 +261,9 @@ class Generator
         $freeBusyCalendar = null;
         foreach ($this->calendars as $cal) {
             if (is_null($freeBusyCalendar)) {
-                $freeBusyCalendar = $cal->fetch($refetch)->parse($this->config);
+                $freeBusyCalendar = $cal->fetch($this->config, $refetch)->parse($this->config);
             } else {
-                $freeBusyCalendar->merge($cal->fetch($refetch)->parse($this->config));
+                $freeBusyCalendar->merge($cal->fetch($this->config, $refetch)->parse($this->config));
             }
         }
 
@@ -268,7 +276,7 @@ class Generator
      * Generates the calendar and returs output.
      *
      * @param  function $func
-     *  Function that takes a single paramter of a \MPorcheron\FreeBusyCal\FreeBusyCalendar` and returns out the output 
+     *  Function that takes a single paramter of a \MPorcheron\FreeBusyCal\FreeBusyCalendar` and returns out the output
      *  as a string.
      * @return \MPorcheron\FreeBusyCal\Generator
      *  Output from the print function.

@@ -1,0 +1,37 @@
+
+v0.4
+----
+- Rewrite CalDAV functionality with Sabre\DAV client (now fully using composer)
+- Rename 'UserCalendar' back to 'Calendar'
+- Move CalDAV functionality to subclass of 'Calendar', 'CalDAVCalendar'
+- Pass configuration to the fetch() function of 'Calendar' class
+- Fix: Merged calendars would overrwrite each other
+- Fix: Generating output with multiple calendars
+- Fix: Added missing changelog
+
+v0.3.1
+------
+- Fix the example code
+
+v0.3
+----
+- Calendar source data is now properly encapsulated in UserCalendar 
+- Calendar printing is now easier to customise.
+- Improved commenting and documentation
+- Support minutes in time ranges
+- Renamed the package
+- Update Composer and add sabre\dav for future use
+- Fix: Values for time ranges weren't treated as documented, fixed code
+- Fix: merging calendars was not always correct
+
+v0.2
+----
+- Update dependancies
+- Add composer support properly
+- Begin modularisation of the code
+- Added example walthrough
+- Clearer commenting and documentation
+
+v0.1
+----
+- Initial release

@@ -4,8 +4,8 @@
  * FreeBusyCal example script. This file connects to an iCal server, retrieves data and calculates availbility,
  * generates and outputs HTML.
  *
- * @author Martin Porcheron <martin@porcheron.uk>
- * @copyright (c) Martin Porcheron 2016.
+ * @author Martin Porcheron <martin-fbc@porcheron.uk>
+ * @copyright (c) Martin Porcheron 2017.
  * @license MIT Licence
  */
 
@@ -15,19 +15,19 @@ use MPorcheron\FreeBusyCal as Fbc;
 
 // Configuration of calendars //////////////////////////////////////////////////////////////////////////////////////////
 
-$cal = (new Fbc\UserCalendar())
-    ->setUsername('ad\username')
-    ->setPassword('password')
-    ->setUrl('https://caldav.example.com:8443/users/username@example.com/calendar');
+$exchange = (new Fbc\Calendar())
+    ->setUrl('https://outlook.office365.com/owa/calendar/dadad@example.com/23432rcsdf34fsc/calendar.ics');
 
-$cal2 = (new Fbc\UserCalendar())
-    ->setUsername('username')
-    ->setPassword('password')
-    ->setUrl('https://caldav.example.com/users/username@example.com/calendar');
+$iCloud = (new MPorcheron\FreeBusyCal\CalDAVCalendar())
+    ->setUsername('my.apple.id@me.com')
+    ->setPassword('application-specific-password')
+    ->setPrincipalUrl('https://caldav.icloud.com/123456789876543/principal/');
 
-$fbc = (new Fbc\Generator($cal, $cal2))
+// Fetch the calendars /////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+$fbc = (new Fbc\Generator($exchange, $iCloud))
     ->setDateRange(new \DateTime('Monday this week'), 14, false)
-    ->setTimeRange(9, 17, 30)
+    ->setTimeRange(9, 17, 60)
     ->fetchAndParse();
 
 // Output the calendar /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,13 +99,13 @@ echo <<<HEADER
                 background: #71B075;
             }
         </style>
-        <!-- Free/Busy Calendar by Martin Porcheron <martin@porcheron.uk> -->
+        <!-- Free/Busy Calendar by Martin Porcheron <martin-fbc@porcheron.uk> -->
     </head>
     <body>
 
 HEADER;
 
-echo $fbc-generate(function (Fbc\FreeBusyCalendar &$cal) {
+echo $fbc->generate(function (Fbc\FreeBusyCalendar &$cal) {
     // Show time range, or just start time
     $showRange = true;
 

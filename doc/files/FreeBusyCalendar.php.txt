@@ -3,17 +3,17 @@
 /**
  * Data store of the availablility.
  *
- * @package \MPorcheron\FreeBusyCal
+ * @package MPorcheron\FreeBusyCal
  */
 
-namespace \MPorcheron\FreeBusyCal;
+namespace MPorcheron\FreeBusyCal;
 
 /**
- * Calendar of a person's free/busy calendar (either one calendar or multiple). This contains the details for a 
+ * Calendar of a person's free/busy calendar (either one calendar or multiple). This contains the details for a
  * person's availability.
  *
- * @author    Martin Porcheron <martin@porcheron.uk>
- * @copyright (c) Martin Porcheron 2016.
+ * @author    Martin Porcheron <martin-fbc@porcheron.uk>
+ * @copyright (c) Martin Porcheron 2017.
  * @license   MIT Licence
  */
 
@@ -157,7 +157,7 @@ class FreeBusyCalendar extends \ArrayObject
      * @param \MPorcheron\FreeBusyCal\FreeBusyCalendar $cal
      *     Availability matrix to merge.
      */
-    public function merge(MPorcheron\FreeBusyCal\FreeBusyCalendar $cal)
+    public function merge(FreeBusyCalendar $cal)
     {
         $this->doMerge($cal->getArrayCopy());
     }
@@ -168,15 +168,23 @@ class FreeBusyCalendar extends \ArrayObject
      * @param mixed[] $arr
      *     Array of availability to merge.
      */
-    private function doMerge(array &$arr)
+    private function doMerge(array $arr)
     {
-        foreach ($arr as $key => $value) {
-            if (is_array($value)) {
-                $this->doMerge($value);
-            } else {
-                $existing = $this->offsetExists($key) ? $this->offsetGet($key) : 0;
-                $this->offsetSet($key, max($existing, $value));
+        foreach ($arr as $date => $times) {
+            if (!$this->offsetExists($date)) {
+                $this->offsetSet($date, $times);
+                continue;
             }
+
+            $this_times = $this->offsetGet($date);
+            foreach ($times as $hour => $minutes) {
+                foreach ($minutes as $minute => $available) {
+                    if (!$available) {
+                        $this_times[$hour][$minute] = false;
+                    }
+                }
+            }
+            $this->offsetSet($date, $this_times);
         }
     }
 }
