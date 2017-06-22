@@ -4,10 +4,10 @@
  * This file is the main FreeBusyCal generator used to retrieve and generate a free/busy calendar. See the class
  * description for example usage.
  *
- * @package \MPorcheron\FreeBusyCal
+ * @package MPorcheron\FreeBusyCal
  */
 
-namespace \MPorcheron\FreeBusyCal;
+namespace MPorcheron\FreeBusyCal;
 
 /**
  * FreeBusyCal generator - this is the main class used to generate a free busy calendar.

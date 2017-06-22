@@ -3,10 +3,10 @@
 /**
  * File for a calendar configuration and data.
  *
- * @package \MPorcheron\FreeBusyCal
+ * @package MPorcheron\FreeBusyCal
  */
 
-namespace \MPorcheron\FreeBusyCal;
+namespace MPorcheron\FreeBusyCal;
 
 use Sabre\VObject\Reader;
 use Sabre\VObject\FreeBusyGenerator;

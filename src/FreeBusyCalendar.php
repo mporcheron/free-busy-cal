@@ -3,10 +3,10 @@
 /**
  * Data store of the availablility.
  *
- * @package \MPorcheron\FreeBusyCal
+ * @package MPorcheron\FreeBusyCal
  */
 
-namespace \MPorcheron\FreeBusyCal;
+namespace MPorcheron\FreeBusyCal;
 
 /**
  * Calendar of a person's free/busy calendar (either one calendar or multiple). This contains the details for a 
