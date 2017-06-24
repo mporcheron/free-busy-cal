@@ -12,7 +12,8 @@ Alternatively:
 
  * if the file is accessed over the internet, use the `setUrl(url)` function instead of `setFile(file)`. 
  * if you have the calendar source inside a string, use the function `setiCal(source)`
- * If your calendar is retrieved from a CalDAV server, use the `CalDAVCalendar` class:
+
+Howevever, if your calendar is retrieved from a CalDAV server and not an ICS file, use the `CalDAVCalendar` class:
 
     $iCloud = (new MPorcheron\FreeBusyCal\CalDAVCalendar())
         ->setUsername('my.apple.id@me.com')
