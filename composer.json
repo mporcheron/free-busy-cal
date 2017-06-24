@@ -1,6 +1,6 @@
 {
-    "name": "mporcheron/FreeBusyCal",
-    "description": "Calculate availability from an iCal server",
+    "name": "mporcheron/free-busy-cal",
+    "description": "Produce a free/busy calendar of availability from iCal files or CalDAV server calendars.",
     "license": "MIT",
     "authors": [
         {
