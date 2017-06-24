@@ -97,4 +97,4 @@ Alternatively test if a specific time/date (i.e. 5pm on 4th May 2016) is availab
 This has been tested with the ICS file from Office 365 and iCloud CalDAV.
 
 ## Questions/Issues?
-Please submit a [GitHub issue](https://github.com/mporcheron/FreeBusyCal)
+Please submit a [GitHub issue](https://github.com/mporcheron/free-busy-cal)

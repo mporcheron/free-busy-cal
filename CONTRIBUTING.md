@@ -1,9 +1,9 @@
 # Contributing
 
 Contributions are welcome (and _encouraged_). If there is a bug you would like fixed, or a feature you would like 
-implemented, it is much more useful to make a [pull request](https://github.com/mporcheron/FreeBusyCal/pulls) that does
-this. However, if you are unable (or feel unable) to do this, then opening a ticket on the
- (Issue tracker)[https://github.com/mporcheron/FreeBusyCal/issues] is the way to go.
+implemented, it is much more useful to make a [pull request](https://github.com/mporcheron/free-busy-cal/pulls) that 
+does this. However, if you are unable (or feel unable) to do this, then opening a ticket on the
+[Issue tracker](https://github.com/mporcheron/free-busy-cal/issues) is the way to go.
 
 Please don't send emails relating to issues or feature requests, they are private, chaotic, and are untrackable. Send 
 emails if you have questions relating to contributing, or other matters.
