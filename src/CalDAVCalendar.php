@@ -228,7 +228,7 @@ REQUEST;
             '{DAV:}response' => 'Sabre\Xml\Deserializer\keyValue',
         ];
 
-        $icalData = [];
+        $iCalData = [];
         
         foreach ($urls as $url) {
             $dav = $this->davClient->request('REPORT', $url, $request);
@@ -248,7 +248,7 @@ REQUEST;
 
                         foreach ($prop['value'] as $propValue) {
                             if (isset($propValue['name']) && $propValue['name'] === self::CAL_DATA) {
-                                $icalData[] = $propValue['value'];
+                                $iCalData[] = $propValue['value'];
                             }
                         };
                     }
@@ -256,6 +256,6 @@ REQUEST;
             }
         }
 
-        return $icalData;
+        return $iCalData;
     }
 }
